@@ -22,7 +22,7 @@
                 type="text"
                 placeholder="아이디"
                 class="login__input"
-                v-model="userId"
+                v-model="user.userId"
               />
             </div>
             <div class="login__box">
@@ -31,12 +31,12 @@
                 type="password"
                 placeholder="비밀번호"
                 class="login__input"
-                v-model="userPwd"
+                v-model="user.userPwd"
               />
             </div>
             <a href="#" class="login__forgot">비밀번호를 잊으셨나요? </a>
 
-            <a href="#" class="login__button" @click="login">로그인</a>
+            <a href="#" class="login__button" @click="confirm">로그인</a>
 
             <div>
               <span class="login__account login__account--account"
@@ -99,8 +99,8 @@ export default {
   data() {
     return {
       user: {
-        userid: null,
-        userpwd: null,
+        userId: null,
+        userPwd: null,
       },
     };
   },
