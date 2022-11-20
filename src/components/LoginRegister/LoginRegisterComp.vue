@@ -72,7 +72,7 @@
               <input type="text" placeholder="비밀번호" class="login__input" />
             </div>
 
-            <input type="submit" value="회원가입" class="login__button" />
+            
             <a href="#" class="login__button">회원가입</a>
 
             <div>
