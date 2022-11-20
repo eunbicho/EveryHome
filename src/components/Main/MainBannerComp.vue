@@ -3,10 +3,10 @@
     <img class="mainImg" src="@/assets/main3.jpg">
     <the-header-navbar class="navBar"></the-header-navbar>
     <div class="mainTitle">
-      <h3>대학생 자취방 커뮤니티</h3>
-      <div class="btnBack">
-        <button class="custom-btn btn-6"><span>게시판 바로가기</span></button>
-      </div>
+      <h3>대학생들을 위한</h3>
+      <h3 style="color: beige; margin-top: -1px">자취방 커뮤니티</h3>
+      <button class="custom-btn btn-6"><span>게시판 바로가기</span></button>
+      
     </div>
     
   </div>
@@ -22,6 +22,8 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.1/KOTRA_BOLD-Bold.woff');
+
 .frame {
   position: relative;
 }
@@ -37,30 +39,37 @@ export default {
 
 .mainTitle {
   position: absolute;
-  top: 280px;
+  top: 180px;
   left: 35px;
   font-size: 3rem;
-  color: beige;
+  color: white;
+  text-shadow: 1px 1px black;
   display: flex;
   flex-direction: column;
   margin: 0;
 }
 
-
+h3{
+  margin: 0px;
+  font-family: 'KOTRA_BOLD-Bold';
+}
 
 
 /* button */
 
 button {
-  margin: 20px;
+  
   outline: none;
+  margin-top: 10px;
+  
 }
 .custom-btn {
   width: 130px;
   height: 40px;
   padding: 10px 25px;
-  border: 2px solid #000;
+  border: 2px solid black;
   font-family: 'Lato', sans-serif;
+  
   font-weight: 500;
   background: transparent;
   cursor: pointer;
@@ -71,11 +80,12 @@ button {
 
 /* 6 */
 .btn-6 {
-   background: #000;
+   background: rgb(59, 175, 117);
   color: #fff;
   line-height: 42px;
   padding: 0;
   border: none;
+  border-radius: 2px;
 }
 .btn-6 span {
   position: relative;
@@ -89,7 +99,7 @@ button {
   content: "";
   height: 0%;
   width: 2px;
-  background: #000;
+  background:black;;
 }
 .btn-6:before {
   right: 0;
@@ -103,7 +113,7 @@ button {
 }
 .btn-6:hover{
   color: #000;
-  background: transparent;
+  background: white;
 }
 .btn-6:hover:before {
   transition: all 500ms ease;
@@ -117,7 +127,7 @@ button {
 .btn-6 span:after {
   position: absolute;
   content: "";
-  background: #000;
+  background:black;;
 }
 .btn-6 span:before {
   left: 0;
