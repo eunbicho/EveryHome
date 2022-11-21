@@ -42,7 +42,45 @@ const routes = [
   {
     path: '/board',
     name: 'board',
-    component: BoardView
+    component: BoardView,
+    redirect: "/board/list",
+    children: [
+      {
+        path: "list",
+        name: "boardlist",
+        component: () => import("@/components/Board/BoardListComp"),
+      },
+      {
+        path: "write",
+        name: "boardwrite",
+        
+        component: () => import("@/components/Board/BoardWriteComp"),
+      },
+      {
+        path: "detail",
+        name: "boarddetail",
+        
+        component: () => import("@/components/Board/BoardDetailComp"),
+      },
+      // {
+      //   path: "view/:articleno",
+      //   name: "boardview",
+
+      //   component: () => import("@/components/Board/BoardDetailComp"),
+      // },
+      // {
+      //   path: "modify",
+      //   name: "boardmodify",
+        
+      //   component: () => import("@/components/board/BoardModify"),
+      // },
+      // {
+      //   path: "delete/:articleno",
+      //   name: "boarddelete",
+
+      //   component: () => import("@/components/board/BoardDelete"),
+      // },
+    ],
 
   },
 ]
