@@ -363,6 +363,11 @@ export default {
       console.log(this.searchCondition);
     },
     search() {
+      if (!this.searchCondition.dongCode) {
+        alert("지역을 선택해주세요.");
+        return;
+      }
+
       this.searchCondition.dealType = parseInt(this.searchCondition.dealType);
       this.searchCondition.type = parseInt(this.searchCondition.type);
 
