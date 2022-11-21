@@ -14,13 +14,24 @@
 
 <script>
 import TheHeaderNavbar from "@/components/TheHeaderNavbar.vue";
+import { mapState } from "vuex";
+
+const memberStore = "memberStore";
+
 export default {
   components: {
     TheHeaderNavbar,
   },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
   methods: {
     toBoard: function () {
-      window.open();
+      if (this.userInfo == null) {
+        alert("로그인 후 이용할 수 있습니다.");
+      } else {
+        this.$router.push({ path: "/board" });
+      }
     },
   },
 };
