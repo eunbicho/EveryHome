@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MainView from '../views/MainView.vue'
 import LoginRegisterView from '../views/LoginRegisterView'
+import BoardView from '../views/BoardView'
 // import store from "@/store";
 
 Vue.use(VueRouter)
@@ -36,6 +37,12 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginRegisterView
+
+  },
+  {
+    path: '/board',
+    name: 'board',
+    component: BoardView
 
   },
 ]

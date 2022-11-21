@@ -1,14 +1,14 @@
 <template>
   <div class="frame">
-    <img class="mainImg" src="@/assets/main3.jpg">
+    <img class="mainImg" src="@/assets/main3.jpg" />
     <the-header-navbar class="navBar"></the-header-navbar>
     <div class="mainTitle">
       <h3>대학생들을 위한</h3>
       <h3 style="color: beige; margin-top: -1px">자취방 커뮤니티</h3>
-      <button class="custom-btn btn-6"><span>게시판 바로가기</span></button>
-      
+      <button class="custom-btn btn-6" @click="toBoard">
+        <span>게시판 바로가기</span>
+      </button>
     </div>
-    
   </div>
 </template>
 
@@ -18,11 +18,16 @@ export default {
   components: {
     TheHeaderNavbar,
   },
+  methods: {
+    toBoard: function () {
+      window.open();
+    },
+  },
 };
 </script>
 
 <style scoped>
-@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.1/KOTRA_BOLD-Bold.woff');
+@import url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.1/KOTRA_BOLD-Bold.woff");
 
 .frame {
   position: relative;
@@ -33,8 +38,6 @@ export default {
   top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
- 
-  
 }
 
 .mainTitle {
@@ -49,27 +52,30 @@ export default {
   margin: 0;
 }
 
-h3{
+h3 {
   margin: 0px;
-  font-family: 'KOTRA_BOLD-Bold';
+  font-family: "KOTRA_BOLD-Bold";
 }
 
+a {
+  text-decoration: none;
+  color: white;
+}
 
 /* button */
 
 button {
-  
   outline: none;
   margin-top: 10px;
-  
 }
 .custom-btn {
+  font: initial;
   width: 130px;
   height: 40px;
   padding: 10px 25px;
   border: 2px solid black;
-  font-family: 'Lato', sans-serif;
-  
+  font-family: "Lato", sans-serif;
+
   font-weight: 500;
   background: transparent;
   cursor: pointer;
@@ -80,7 +86,7 @@ button {
 
 /* 6 */
 .btn-6 {
-   background: rgb(59, 175, 117);
+  background: rgb(59, 175, 117);
   color: #fff;
   line-height: 42px;
   padding: 0;
@@ -99,7 +105,7 @@ button {
   content: "";
   height: 0%;
   width: 2px;
-  background:black;;
+  background: black;
 }
 .btn-6:before {
   right: 0;
@@ -111,7 +117,7 @@ button {
   bottom: 0;
   transition: all 500ms ease;
 }
-.btn-6:hover{
+.btn-6:hover {
   color: #000;
   background: white;
 }
@@ -127,7 +133,7 @@ button {
 .btn-6 span:after {
   position: absolute;
   content: "";
-  background:black;;
+  background: black;
 }
 .btn-6 span:before {
   left: 0;
@@ -150,4 +156,8 @@ button {
   width: 100%;
 }
 
+.v-application code {
+  all: unset;
+  color: #eee;
+}
 </style>
