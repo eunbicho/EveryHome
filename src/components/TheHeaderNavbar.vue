@@ -2,20 +2,42 @@
   <div class="background">
     <router-link to="/" class="left">로고</router-link>
     <div class="right">
-      <nav class="navBar beforeLogin"><router-link to="/login">로그인</router-link></nav>
-      <nav class="navBar afterLogin" @click.prevent="onClickLogout">로그아웃</nav>
-      <nav class="navBar afterLogin"><router-link to="/mypage">내 정보</router-link></nav>
-      <nav class="navBar"><router-link to="/board">게시판</router-link></nav>
+      <nav class="navBar beforeLogin" v-if="userInfo == null">
+        <router-link to="/login">로그인</router-link>
+      </nav>
+      <nav
+        class="navBar afterLogin"
+        v-if="userInfo != null"
+        style="margin-right: 20px"
+      >
+        {{ userInfo.userName }}님 안녕하세요!
+      </nav>
+      <nav
+        class="navBar afterLogin"
+        @click.prevent="onClickLogout"
+        v-if="userInfo != null"
+      >
+        로그아웃
+      </nav>
+      <nav class="navBar afterLogin" v-if="userInfo != null">
+        <router-link to="/mypage">내 정보</router-link>
+      </nav>
+      <nav class="navBar">
+        <router-link to="/board" v-if="userInfo != null">게시판</router-link>
+      </nav>
     </div>
   </div>
 </template>
 
 <script>
-import {mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 const memberStore = "memberStore";
 
 export default {
+  computed: {
+    ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
+  },
   methods: {
     ...mapActions(memberStore, ["userLogout"]),
     // ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
@@ -24,11 +46,11 @@ export default {
       // this.SET_USER_INFO(null);
       // sessionStorage.removeItem("access-token");
       // if (this.$route.path != "/") this.$router.push({ name: "main" });
-      console.log(this.userInfo.userid);
+      console.log(this.userInfo);
       //vuex actions에서 userLogout 실행(Backend에 저장 된 리프레시 토큰 없애기
       //+ satate에 isLogin, userInfo 정보 변경)
       // this.$store.dispatch("userLogout", this.userInfo.userid);
-      this.userLogout(this.userInfo.userid);
+      this.userLogout(this.userInfo.userId);
       sessionStorage.removeItem("access-token"); //저장된 토큰 없애기
       sessionStorage.removeItem("refresh-token"); //저장된 토큰 없애기
       if (this.$route.path != "/") this.$router.push({ name: "main" });
@@ -48,7 +70,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+
   padding-right: 20px;
 
   background-color: white;
@@ -57,11 +79,11 @@ export default {
   border-radius: 5px;
 }
 
-.left{
+.left {
   margin-left: 30px;
 }
 
-.right{
+.right {
   display: flex;
   flex-direction: row;
 }

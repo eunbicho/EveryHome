@@ -9,78 +9,111 @@
     <div class="searchFrame">
       <form>
         <div class="searchCondition">
-          <div style="width: fit-content">
-            <input type="radio" name="search" /><span
-              >대학교 기준으로 검색</span
+          <div
+            style="
+              width: fit-content;
+              margin-right: 10px;
+              display: flex;
+              flex-direction: row;
+            "
+          >
+            <input type="radio" name="search" id="univ" /><label for="univ"
+              >대학교 기준으로 검색</label
             >
           </div>
-          <div style="width: fit-content">
-            <input type="radio" name="search" checked="checked" /><span
-              >지역 기준으로 검색</span
-            >
+          <div
+            style="
+              width: fit-content;
+              margin-right: 10px;
+              display: flex;
+              flex-direction: row;
+            "
+          >
+            <input
+              type="radio"
+              name="search"
+              checked="checked"
+              id="region"
+            /><label for="region">지역 기준으로 검색</label>
           </div>
         </div>
 
         <!-- 선택한 조건들 전체를 묶는 conditions-->
         <div class="conditions">
-          <!-- 지역 기준 검색 (시, 군, 구) -->
-          <div class="searchRegion">
-            <div style="margin-right: 5px">
-              <label>시</label>
-              <select v-model="selected.si">
-                <option value="" disabled selected>시를 선택해주세요.</option>
-                <option v-for="(si, key) in sis" :value="key" :key="key">
-                  {{ si }}
-                </option>
-              </select>
-            </div>
-
-            <div style="margin-right: 5px">
-              <label>구</label>
-              <select
-                :disabled="selected.si === undefined"
-                v-model="selected.gu"
-              >
-                <option value="" disabled selected>구를 선택해주세요.</option>
-                <option v-for="gu in gus[selected.si]" :key="gu">
-                  {{ gu }}
-                </option>
-              </select>
-            </div>
-
-            <div style="margin-right: 5px">
-              <label>동</label>
-              <select
-                :disabled="selected.gu === undefined"
-                v-model="selected.dong"
-              >
-                <option value="" disabled selected>동을 선택해주세요.</option>
-                <option v-for="dong in dongs[selected.gu]" :key="dong">
-                  {{ dong }}
-                </option>
-              </select>
-            </div>
+          <div style="margin-left: 10px; margin-top: 20px">
+            <h4><i class="bx bx-dollar-circle icon"></i> 지역 선택</h4>
+            <b-row class="mt-4 mb-4 text-center">
+              <b-col class="sm-3">
+                <b-form-select
+                  v-model="sidoCode"
+                  :options="sidos"
+                  @change="getGugun"
+                ></b-form-select>
+              </b-col>
+              <b-col class="sm-3">
+                <b-form-select
+                  v-model="gugunCode"
+                  :options="guguns"
+                  @change="getDong"
+                ></b-form-select>
+              </b-col>
+              <b-col class="sm-3">
+                <b-form-select
+                  v-model="dongCode"
+                  :options="dongs"
+                  @change="curDongCode"
+                ></b-form-select>
+              </b-col>
+            </b-row>
           </div>
-
           <!-- 학교 기준 검색 (보류) -->
 
           <!-- 보증금 선택 -->
           <div class="select">
             <h4><i class="bx bx-dollar-circle icon"></i> 보증금</h4>
-            <multi-slider class="slider"></multi-slider>
+            <multi-slider
+              class="slider"
+              low="300"
+              high="1000"
+              min="0"
+              max="5000"
+              unit="만원"
+              step="50"
+              @slide-change="setCondition"
+              style="margin-left: 30px"
+            ></multi-slider>
           </div>
 
           <!-- 월세 검색 -->
           <div class="select">
             <h4><i class="bx bx-money icon"></i> 월세 금액</h4>
-            <multi-slider class="slider"></multi-slider>
+            <multi-slider
+              class="slider"
+              low="30"
+              high="50"
+              min="0"
+              max="150"
+              unit="만원"
+              step="5"
+              @slide-change="setCondition"
+              style="margin-left: 30px"
+            ></multi-slider>
           </div>
 
           <!-- 평수 검색 -->
           <div class="select">
-            <box-icon name="home"></box-icon>
             <h4><i class="bx bx-home icon"></i> 평수</h4>
-            <multi-slider class="slider"></multi-slider>
+            <multi-slider
+              class="slider"
+              low="5"
+              high="15"
+              min="0"
+              max="40"
+              unit="평"
+              step="1"
+              @slide-change="setCondition"
+              style="margin-left: 30px"
+            ></multi-slider>
           </div>
 
           <!-- 전월세 선택 -->
@@ -94,14 +127,128 @@
                 margin-bottom: 15px;
               "
             >
-              <div style="width: fit-content; margin-right: 10px">
-                <input type="radio" name="search" /><span>전체</span>
+              <div
+                style="margin-right: 10px; display: flex; flex-direction: row"
+              >
+                <input
+                  type="radio"
+                  name="dealtype"
+                  id="all"
+                  checked="checked"
+                  v-model="searchCondition.dealType"
+                  value="0"
+                /><label for="all">전체</label>
               </div>
-              <div style="width: fit-content; margin-right: 10px">
-                <input type="radio" name="search" /><span>전세</span>
+              <div
+                style="
+                  width: fit-content;
+                  margin-right: 10px;
+                  display: flex;
+                  flex-direction: row;
+                "
+              >
+                <input
+                  type="radio"
+                  name="dealtype"
+                  id="j"
+                  v-model="searchCondition.dealType"
+                  value="1"
+                /><label for="j">전세</label>
               </div>
-              <div style="width: fit-content; margin-right: 10px">
-                <input type="radio" name="search" /><span>월세</span>
+              <div
+                style="
+                  width: fit-content;
+                  margin-right: 10px;
+                  display: flex;
+                  flex-direction: row;
+                "
+              >
+                <input
+                  type="radio"
+                  name="dealtype"
+                  id="w"
+                  v-model="searchCondition.dealType"
+                  value="2"
+                /><label for="w">월세</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 주택 종류 선택 -->
+          <div class="hometype">
+            <h4><i class="bx bx-select-multiple icon"></i> 집 종류</h4>
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                margin-top: 10px;
+                margin-bottom: 15px;
+              "
+            >
+              <div
+                style="
+                  width: fit-content;
+                  margin-right: 10px;
+                  display: flex;
+                  flex-direction: row;
+                "
+              >
+                <input
+                  type="radio"
+                  name="hometype"
+                  id="all2"
+                  checked="checked"
+                  v-model="searchCondition.type"
+                  value="0"
+                /><label for="all2">전체</label>
+              </div>
+              <div
+                style="
+                  width: fit-content;
+                  margin-right: 10px;
+                  display: flex;
+                  flex-direction: row;
+                "
+              >
+                <input
+                  type="radio"
+                  name="hometype"
+                  id="y"
+                  v-model="searchCondition.type"
+                  value="1"
+                /><label for="y">연립다세대</label>
+              </div>
+              <div
+                style="
+                  width: fit-content;
+                  margin-right: 10px;
+                  display: flex;
+                  flex-direction: row;
+                "
+              >
+                <input
+                  type="radio"
+                  name="hometype"
+                  id="apart"
+                  v-model="searchCondition.type"
+                  value="2"
+                /><label for="apart">아파트</label>
+              </div>
+              <div
+                style="
+                  width: fit-content;
+                  margin-right: 10px;
+                  display: flex;
+                  flex-direction: row;
+                "
+              >
+                <input
+                  type="radio"
+                  name="hometype"
+                  id="ot"
+                  v-model="searchCondition.type"
+                  value="3"
+                /><label for="ot">오피스텔</label>
               </div>
             </div>
           </div>
@@ -110,7 +257,7 @@
         <div class="mrent" ondblclick="this.checked=false"></div>
         <div class="area"></div>
 
-        <button class="searchBtn">방 둘러보기</button>
+        <button class="searchBtn" @click.prevent="search">방 둘러보기</button>
       </form>
     </div>
   </div>
@@ -118,32 +265,117 @@
 
 <script>
 import MultiSlider from "@/components/MultiSlider.vue";
+import { sidoList, gugunList, dongList, listHouseDeal } from "@/api/house";
+
 export default {
   components: { MultiSlider },
   data() {
     return {
-      sis: ["서울특별시", "경기도 고양시"],
-      gus: [
-        ["종로구", "은평구"],
-        ["덕양구", "일산동구"],
-      ],
-      dongs: [
-        [
-          ["종로구동1", "종로구동2"],
-          ["은평구동1", "은평구동2"],
-        ],
-        [
-          ["덕양구구동1", "덕양구동2"],
-          ["일산동구동1", "일산동구동2"],
-        ],
-      ],
-
-      selected: {
-        si: undefined,
-        gu: undefined,
-        dong: undefined,
+      sidoCode: null,
+      gugunCode: null,
+      dongCode: null,
+      sidos: [{ value: null, text: "시/도 선택" }],
+      guguns: [{ value: null, text: "구/군 선택" }],
+      dongs: [{ value: null, text: "동 선택" }],
+      searchCondition: {
+        dongCode: "",
+        depositLow: 300,
+        depositHigh: 1000,
+        rentLow: 30,
+        rentHigh: 50,
+        areaLow: 5,
+        areaHigh: 15,
+        dealType: 0,
+        type: 0,
       },
     };
+  },
+  created() {
+    this.clearSidoList();
+    sidoList(
+      ({ data }) => {
+        data.forEach((sido) => {
+          this.sidos.push({ value: sido.sidoCode, text: sido.sidoName });
+        });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  },
+  methods: {
+    getGugun() {
+      this.clearGugunList();
+      this.clearDongList();
+      const param = { sido: this.sidoCode };
+      gugunList(
+        param,
+        ({ data }) => {
+          data.forEach((gugun) => {
+            this.guguns.push({ value: gugun.gugunCode, text: gugun.gugunName });
+          });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    getDong() {
+      this.clearDongList();
+      const param = { gugun: this.gugunCode };
+      dongList(
+        param,
+        ({ data }) => {
+          data.forEach((dong) => {
+            this.dongs.push({ value: dong.dongCode, text: dong.dongName });
+          });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+      console.log("dongCode: ", this.dongs);
+    },
+    clearSidoList() {
+      this.sidos = [{ value: null, text: "시/도 선택" }];
+    },
+    clearGugunList() {
+      this.guguns = [{ value: null, text: "구/군 선택" }];
+    },
+    clearDongList() {
+      this.dongs = [{ value: null, text: "동 선택" }];
+    },
+    curDongCode() {
+      this.searchCondition.dongCode = this.dongCode;
+    },
+    setCondition(value) {
+      if (value[2] == 50) {
+        this.searchCondition.depositLow = value[0];
+        this.searchCondition.depositHigh = value[1];
+      } else if (value[2] == 5) {
+        this.searchCondition.rentLow = value[0];
+        this.searchCondition.rentHigh = value[1];
+      } else if (value[2] == 1) {
+        this.searchCondition.areaLow = value[0];
+        this.searchCondition.areaHigh = value[1];
+      }
+
+      console.log(this.searchCondition);
+    },
+    search() {
+      this.searchCondition.dealType = parseInt(this.searchCondition.dealType);
+      this.searchCondition.type = parseInt(this.searchCondition.type);
+
+      listHouseDeal(
+        this.searchCondition,
+        ({ data }) => {
+          console.log(data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
   },
 };
 </script>
@@ -317,9 +549,15 @@ form {
   margin-left: 10px;
 }
 
+.hometype {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
 /* select box 디자인 */
 select {
-  width: 100px;
+  width: 180px;
   margin: 0.5em auto 2em auto;
   display: block;
   height: 40px;
@@ -330,11 +568,11 @@ select {
 }
 
 label {
-  width: 30%;
   display: block;
   margin: 0 auto;
   font-size: 0.9rem;
   font-family: "NanumBarunGothic";
   font-weight: bold;
+  margin-left: 10px;
 }
 </style>
