@@ -1,6 +1,13 @@
 import { apiInstance } from "./index.js";
-apiInstance
+apiInstance;
 const api = apiInstance();
+
+async function registerUser(user, success, fail) {
+  await api
+    .post(`/user/register`, JSON.stringify(user))
+    .then(success)
+    .catch(fail);
+}
 
 async function login(user, success, fail) {
   await api.post(`/user/login`, JSON.stringify(user)).then(success).catch(fail);
@@ -12,7 +19,8 @@ async function findById(userId, success, fail) {
 }
 
 async function tokenRegeneration(user, success, fail) {
-  api.defaults.headers["refresh-token"] = sessionStorage.getItem("refresh-token"); //axios header에 refresh-token 셋팅
+  api.defaults.headers["refresh-token"] =
+    sessionStorage.getItem("refresh-token"); //axios header에 refresh-token 셋팅
   await api.post(`/user/refresh`, user).then(success).catch(fail);
 }
 
@@ -32,4 +40,13 @@ async function deleteUser(userId, success, fail) {
   await api.delete(`/user/${userId}`).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout, idCheck, modifyUser, deleteUser };
+export {
+  registerUser,
+  login,
+  findById,
+  tokenRegeneration,
+  logout,
+  idCheck,
+  modifyUser,
+  deleteUser,
+};

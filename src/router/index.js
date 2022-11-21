@@ -1,11 +1,11 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import MainView from '../views/MainView.vue'
-import LoginRegisterView from '../views/LoginRegisterView'
-import BoardView from '../views/BoardView'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import MainView from "../views/MainView.vue";
+import LoginRegisterView from "../views/LoginRegisterView";
+import BoardView from "../views/BoardView";
 // import store from "@/store";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 // const onlyAuthUser = async (to, from, next) => {
 //   const checkUserInfo = store.getters["memberStore/checkUserInfo"];
@@ -29,26 +29,31 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'main',
-    component: MainView
+    path: "/",
+    name: "main",
+    component: MainView,
   },
   {
-    path: '/login',
-    name: 'login',
-    component: LoginRegisterView
-
+    path: "/login",
+    name: "login",
+    component: LoginRegisterView,
   },
   {
-    path: '/board',
-    name: 'board',
-    component: BoardView
-
+    path: "/board",
+    name: "board",
+    component: BoardView,
   },
-]
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+});
 
-export default router
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => {
+    if (err.name !== "NavigationDuplicated") throw err;
+  });
+};
+
+export default router;

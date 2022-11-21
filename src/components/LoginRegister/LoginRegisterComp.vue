@@ -34,9 +34,8 @@
                 v-model="user.userPwd"
               />
             </div>
-            <a href="#" class="login__forgot">비밀번호를 잊으셨나요? </a>
 
-            <a href="#" class="login__button" @click="confirm">로그인</a>
+            <a class="login__button" @click="confirm">로그인</a>
 
             <div>
               <span class="login__account login__account--account"
@@ -54,26 +53,57 @@
 
             <div class="login__box">
               <i class="bx bx-user login__icon"></i>
-              <input type="text" placeholder="아이디" class="login__input" />
+              <input
+                type="text"
+                placeholder="아이디"
+                class="login__input"
+                v-model="rUser.userId"
+                @keyup="check"
+              />
             </div>
+            <div id="idcheck-result"></div>
 
             <div class="login__box">
               <i class="bx bx-smile login__icon"></i>
-              <input type="text" placeholder="이름" class="login__input" />
+              <input
+                type="text"
+                placeholder="이름"
+                class="login__input"
+                v-model="rUser.userName"
+              />
             </div>
 
             <div class="login__box">
               <i class="bx bx-at login__icon"></i>
-              <input type="text" placeholder="이메일" class="login__input" />
+              <input
+                type="text"
+                placeholder="이메일"
+                class="login__input"
+                v-model="rUser.userEmail"
+              />
             </div>
 
             <div class="login__box">
               <i class="bx bx-lock login__icon"></i>
-              <input type="text" placeholder="비밀번호" class="login__input" />
+              <input
+                type="password"
+                placeholder="비밀번호"
+                class="login__input"
+                v-model="rUser.userPwd"
+              />
             </div>
 
-            
-            <a href="#" class="login__button">회원가입</a>
+            <div class="login__box">
+              <i class="bx bx-lock login__icon"></i>
+              <input
+                type="password"
+                placeholder="비밀번호 확인"
+                class="login__input"
+                v-model="rUser.pwdConfirm"
+              />
+            </div>
+
+            <a class="login__button" @click="register">회원가입</a>
 
             <div>
               <span class="login__account login__account--account"
@@ -92,6 +122,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import { idCheck, registerUser } from "@/api/member";
 
 const memberStore = "memberStore";
 
@@ -102,6 +133,14 @@ export default {
         userId: null,
         userPwd: null,
       },
+      rUser: {
+        userId: null,
+        userName: null,
+        userEmail: null,
+        userPwd: null,
+        pwdConfirm: null,
+      },
+      idFlag: false,
     };
   },
 
@@ -111,17 +150,97 @@ export default {
   methods: {
     ...mapActions(memberStore, ["userConfirm", "getUserInfo"]),
     async confirm() {
-      await this.userConfirm(this.user);
-      let token = sessionStorage.getItem("access-token");
-      // console.log("1. confirm() token >> " + token);
-      if (this.isLogin) {
-        await this.getUserInfo(token);
-        // console.log("4. confirm() userInfo :: ", this.userInfo);
-        this.$router.push({ name: "main" });
+      if (!this.user.userId) {
+        alert("아이디를 입력해주세요.");
+      } else if (!this.user.userPwd) {
+        alert("비밀번호를 입력해주세요");
+      } else {
+        await this.userConfirm(this.user);
+        let token = sessionStorage.getItem("access-token");
+        // console.log("1. confirm() token >> " + token);
+        if (this.isLogin) {
+          await this.getUserInfo(token);
+          console.log("4. confirm() userInfo :: ", this.userInfo);
+          this.$router.push({ name: "main" });
+        }
       }
     },
     movePage() {
       this.$router.push({ name: "join" });
+    },
+    async check() {
+      let resultDiv = document.querySelector("#idcheck-result");
+
+      if (this.rUser.userId.length >= 5 && this.rUser.userId.length <= 16) {
+        await idCheck(
+          this.rUser.userId,
+          ({ data }) => {
+            if (data == 0) {
+              resultDiv.setAttribute("class", "mb-3 text-primary");
+              resultDiv.textContent =
+                this.rUser.userId + "는 사용할 수 있습니다.";
+              this.idFlag = true;
+            } else {
+              resultDiv.setAttribute("class", "mb-3 text-danger");
+              resultDiv.textContent =
+                this.rUser.userId + "는 사용할 수 없습니다.";
+              this.idFlag = false;
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      } else {
+        resultDiv.setAttribute("class", "mb-3 text-dark");
+        resultDiv.textContent = "아이디는 5자 이상 16자 이하 입니다.";
+        this.idFlag = false;
+      }
+    },
+    async register() {
+      if (!this.idFlag) {
+        alert("아이디를 확인해주세요.");
+      } else if (!this.rUser.userName) {
+        alert("이름을 입력해주세요.");
+      } else if (!this.rUser.userEmail) {
+        alert("이메일을 입력해주세요.");
+      } else if (!this.rUser.userPwd) {
+        alert("비밀번호를 입력해주세요.");
+      } else if (!this.rUser.pwdConfirm) {
+        alert("비밀번호 확인을 입력해주세요.");
+      } else if (this.rUser.userPwd != this.rUser.pwdConfirm) {
+        alert("비밀번호가 다릅니다. 다시 입력해주세요.");
+      } else {
+        const loginin = document.getElementById("login-in");
+        const loginup = document.getElementById("login-up");
+        await registerUser(
+          this.rUser,
+          ({ data }) => {
+            console.log("register " + data);
+            alert(this.rUser.userName + "님 환영합니다!");
+            loginin.classList.remove("none");
+            loginup.classList.remove("block");
+
+            loginin.classList.add("block");
+            loginup.classList.add("none");
+
+            this.clearRegister();
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    },
+    clearRegister() {
+      this.rUser.userId = null;
+      this.rUser.userName = null;
+      this.rUser.userEmail = null;
+      this.rUser.userPwd = null;
+      this.rUser.pwdConfirm = null;
+
+      let resultDiv = document.querySelector("#idcheck-result");
+      resultDiv.textContent = "";
     },
   },
 
