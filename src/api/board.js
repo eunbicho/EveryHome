@@ -22,20 +22,18 @@ function deleteArticle(articleNo, success, fail) {
   api.delete(`/board/${articleNo}`).then(success).catch(fail);
 }
 
-function searchArticleByUserId(userId, param, success, fail) {
-  api.get(`/board/userId/${userId}`, { params: param }).then(success).catch(fail);
-}
-
-function searchArticleBySubject(subject, param, success, fail) {
-  api.get(`/board/subject/${subject}`, { params: param }).then(success).catch(fail);
-}
-
 function likeArticle(user, articleNo, success, fail) {
-  api.put(`/board/like/${articleNo}`, JSON.stringify(user)).then(success).catch(fail);
+  api
+    .put(`/board/like/${articleNo}`, JSON.stringify(user))
+    .then(success)
+    .catch(fail);
 }
 
 function unlikeArticle(user, articleNo, success, fail) {
-  api.put(`/board/unlike/${articleNo}`, JSON.stringify(user)).then(success).catch(fail);
+  api
+    .put(`/board/unlike/${articleNo}`, JSON.stringify(user))
+    .then(success)
+    .catch(fail);
 }
 
 function writeComment(comment, success, fail) {
@@ -55,11 +53,17 @@ function deleteComment(commentNo, success, fail) {
 }
 
 function likeComment(user, commentNo, success, fail) {
-  api.put(`/comment/like/${commentNo}`, JSON.stringify(user)).then(success).catch(fail);
+  api
+    .put(`/comment/like/${commentNo}`, JSON.stringify(user))
+    .then(success)
+    .catch(fail);
 }
 
 function unlikeComment(user, commentNo, success, fail) {
-  api.put(`/comment/unlike/${commentNo}`, JSON.stringify(user)).then(success).catch(fail);
+  api
+    .put(`/comment/unlike/${commentNo}`, JSON.stringify(user))
+    .then(success)
+    .catch(fail);
 }
 
 export {
@@ -68,8 +72,6 @@ export {
   selectArticle,
   modifyArticle,
   deleteArticle,
-  searchArticleByUserId,
-  searchArticleBySubject,
   likeArticle,
   unlikeArticle,
   writeComment,
@@ -77,5 +79,5 @@ export {
   modifyComment,
   deleteComment,
   likeComment,
-  unlikeComment
+  unlikeComment,
 };
