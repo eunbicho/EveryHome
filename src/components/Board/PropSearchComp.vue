@@ -32,11 +32,7 @@ import { listArticle } from "@/api/board";
 
 export default {
   created() {
-    const searchCondition = {
-      type: "룸메 구해요",
-      key: "subject",
-      word: "ㅎㅇ1",
-    };
+    const searchCondition = {};
     listArticle(
       searchCondition,
       ({ data }) => {
