@@ -1,18 +1,5 @@
-import router from "@/router";
 import {
   listArticle,
-  writeArticle,
-  selectArticle,
-  modifyArticle,
-  deleteArticle,
-  likeArticle,
-  unlikeArticle,
-  writeComment,
-  listComment,
-  modifyComment,
-  deleteComment,
-  likeComment,
-  unlikeComment,
 } from "@/api/board";
 
 const boardStore = {
