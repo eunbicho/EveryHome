@@ -35,7 +35,22 @@
               />
             </div>
 
-            <a class="login__button" @click="confirm">로그인</a>
+            <b-alert
+              :show="dismissCountDown"
+              fade
+              variant="danger"
+              @dismiss-count-down="countDownChanged"
+              class="alert-favorite"
+            >
+              {{ msg }}
+            </b-alert>
+
+            <a
+              class="login__button"
+              style="text-decoration: none; color: white"
+              @click="confirm"
+              >로그인</a
+            >
 
             <div>
               <span class="login__account login__account--account"
@@ -61,7 +76,7 @@
                 @keyup="check"
               />
             </div>
-            <div id="idcheck-result"></div>
+            <div id="idcheck-result" style="margin-top: 5px"></div>
 
             <div class="login__box">
               <i class="bx bx-smile login__icon"></i>
@@ -103,7 +118,22 @@
               />
             </div>
 
-            <a class="login__button" @click="register">회원가입</a>
+            <b-alert
+              :show="dismissCountDown2"
+              fade
+              variant="danger"
+              @dismiss-count-down="countDownChanged2"
+              class="alert-favorite"
+            >
+              {{ msg }}
+            </b-alert>
+
+            <a
+              class="login__button"
+              style="text-decoration: none; color: white"
+              @click="register"
+              >회원가입</a
+            >
 
             <div>
               <span class="login__account login__account--account"
@@ -141,6 +171,11 @@ export default {
         pwdConfirm: null,
       },
       idFlag: false,
+      dismissSecs: 10,
+      dismissCountDown: 0,
+      dismissSecs2: 10,
+      dismissCountDown2: 0,
+      msg: null,
     };
   },
 
@@ -149,11 +184,25 @@ export default {
   },
   methods: {
     ...mapActions(memberStore, ["userConfirm", "getUserInfo"]),
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+    },
+    showAlert() {
+      this.dismissCountDown = this.dismissSecs;
+    },
+    countDownChanged2(dismissCountDown2) {
+      this.dismissCountDown2 = dismissCountDown2;
+    },
+    showAlert2() {
+      this.dismissCountDown2 = this.dismissSecs2;
+    },
     async confirm() {
       if (!this.user.userId) {
-        alert("아이디를 입력해주세요.");
+        this.msg = "아이디를 입력해주세요.";
+        this.showAlert();
       } else if (!this.user.userPwd) {
-        alert("비밀번호를 입력해주세요");
+        this.msg = "비밀번호를 입력해주세요";
+        this.showAlert();
       } else {
         await this.userConfirm(this.user);
         let token = sessionStorage.getItem("access-token");
@@ -199,17 +248,20 @@ export default {
     },
     async register() {
       if (!this.idFlag) {
-        alert("아이디를 확인해주세요.");
+        this.msg = "아이디를 확인해주세요.";
+        this.showAlert2();
       } else if (!this.rUser.userName) {
-        alert("이름을 입력해주세요.");
+        this.msg = "이름을 입력해주세요.";
+        this.showAlert2();
       } else if (!this.rUser.userEmail) {
-        alert("이메일을 입력해주세요.");
+        this.msg = "이메일을 입력해주세요.";
+        this.showAlert2();
       } else if (!this.rUser.userPwd) {
-        alert("비밀번호를 입력해주세요.");
-      } else if (!this.rUser.pwdConfirm) {
-        alert("비밀번호 확인을 입력해주세요.");
+        this.msg = "비밀번호를 입력해주세요.";
+        this.showAlert2();
       } else if (this.rUser.userPwd != this.rUser.pwdConfirm) {
-        alert("비밀번호가 다릅니다. 다시 입력해주세요.");
+        this.msg = "비밀번호가 일치하지 않습니다.";
+        this.showAlert2();
       } else {
         const loginin = document.getElementById("login-in");
         const loginup = document.getElementById("login-up");
@@ -387,7 +439,7 @@ img {
   &__button {
     display: block;
     padding: 1rem;
-    margin: 2rem 0;
+    margin: 1rem 0;
     background-color: $color;
     color: #fff;
     font-weight: 600;
@@ -484,5 +536,9 @@ img {
       bottom: -5.5rem;
     }
   }
+}
+
+.alert-favorite {
+  margin-top: 0.7rem;
 }
 </style>

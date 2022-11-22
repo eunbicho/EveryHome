@@ -11,14 +11,14 @@
         <!-- 선택한 조건들 전체를 묶는 conditions-->
         <div class="conditions">
           <div style="margin-left: 35px; margin-top: 20px">
-            <h4><i class="bx bx-dollar-circle icon"></i> 지역 선택</h4>
+            <h4><i class="bx bx-current-location icon"></i> 지역 선택</h4>
             <b-row class="mt-4 mb-4 text-center">
               <b-col>
                 <b-form-select
                   v-model="sidoCode"
                   :options="sidos"
                   @change="getGugun"
-                  style="margin-left: 20px"
+                  style="margin-left: 20px; border-radius: 7px"
                 ></b-form-select>
               </b-col>
               <b-col>
@@ -26,6 +26,7 @@
                   v-model="gugunCode"
                   :options="guguns"
                   @change="getDong"
+                  style="border-radius: 7px"
                 ></b-form-select>
               </b-col>
               <b-col>
@@ -33,11 +34,32 @@
                   v-model="dongCode"
                   :options="dongs"
                   @change="curDongCode"
+                  style="border-radius: 7px"
                 ></b-form-select>
               </b-col>
               <button class="btn-favorite" @click.prevent="favorite">
                 관심지역 추가
               </button>
+              <b-col>
+                <b-alert
+                  :show="dismissCountDown"
+                  fade
+                  variant="success"
+                  @dismiss-count-down="countDownChanged"
+                  class="alert-favorite"
+                >
+                  추가 성공!
+                </b-alert>
+                <b-alert
+                  :show="dismissCountDown2"
+                  fade
+                  variant="danger"
+                  @dismiss-count-down="countDownChanged2"
+                  class="alert-favorite"
+                >
+                  에러 발생!
+                </b-alert>
+              </b-col>
             </b-row>
           </div>
           <!-- 학교 기준 검색 (보류) -->
@@ -248,7 +270,7 @@
             @click.prevent="search"
             style="margin-right: 15px"
           >
-            방 둘러보기
+            매물 검색
           </button>
         </div>
       </form>
@@ -259,7 +281,7 @@
 <script>
 import MultiSlider from "@/components/MultiSlider.vue";
 import { sidoList, gugunList, dongList, listHouseDeal } from "@/api/house";
-//import { addFavorite } from "@/api/member";
+import { addFavorite } from "@/api/member";
 import { mapState, mapMutations } from "vuex";
 
 const houseStore = "houseStore";
@@ -286,6 +308,10 @@ export default {
         dealType: 0,
         type: 0,
       },
+      dismissSecs: 1,
+      dismissCountDown: 0,
+      dismissSecs2: 1,
+      dismissCountDown2: 0,
     };
   },
   computed: {
@@ -395,6 +421,30 @@ export default {
         alert("지역을 선택해주세요.");
         return;
       }
+
+      addFavorite(
+        { userId: this.userInfo.userId, dongCode: this.dongCode },
+        ({ data }) => {
+          console.log(data);
+          this.showAlert();
+        },
+        (error) => {
+          console.log(error);
+          this.showAlert2();
+        }
+      );
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+    },
+    showAlert() {
+      this.dismissCountDown = this.dismissSecs;
+    },
+    countDownChanged2(dismissCountDown2) {
+      this.dismissCountDown2 = dismissCountDown2;
+    },
+    showAlert2() {
+      this.dismissCountDown2 = this.dismissSecs2;
     },
   },
 };
@@ -548,8 +598,8 @@ h4 {
   font-family: "NanumBarunGothic";
   font-weight: bold;
 
-  width: 100px;
-  height: 30px;
+  width: 130px;
+  height: 35px;
 
   margin-top: 20px;
   margin-bottom: 30px;
@@ -635,5 +685,22 @@ label {
   width: 100%;
   display: flex;
   justify-content: flex-end;
+}
+
+.alert-favorite {
+  width: 130px;
+  height: 35px;
+
+  margin-top: 10px;
+  margin-left: 15px;
+  margin-bottom: 10px;
+  margin-right: 15px;
+
+  align-content: center;
+  justify-content: center;
+}
+
+.alert {
+  padding: 0.35rem;
 }
 </style>

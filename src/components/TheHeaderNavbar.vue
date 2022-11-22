@@ -3,7 +3,7 @@
     <router-link to="/" class="left">로고</router-link>
     <div class="right">
       <nav class="navBar beforeLogin" v-if="userInfo == null">
-        <router-link to="/login">로그인</router-link>
+        <router-link to="/login">로그인 / 회원가입</router-link>
       </nav>
       <nav
         class="navBar afterLogin"

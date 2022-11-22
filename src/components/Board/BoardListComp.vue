@@ -92,6 +92,15 @@ export default {
       } else if (this.searchCondition.key == "글쓴이") {
         this.searchCondition.key = "userId";
       }
+
+      if (this.searchCondition.type == "말머리 선택") {
+        this.searchCondition.type = null;
+      }
+
+      if (this.searchCondition.key == "검색 조건") {
+        this.searchCondition.key = null;
+      }
+
       listArticle(
         this.searchCondition,
         ({ data }) => {
@@ -147,17 +156,18 @@ export default {
       ],
       articles: [],
       items: [
+        "말머리 선택",
         "룸메 구해요",
         "정보 공유",
         "배달 같이 시켜요",
         "질문글",
         "방 양도해요",
       ],
-      itemsSearch: ["글쓴이", "제목"],
+      itemsSearch: ["검색 조건", "글쓴이", "제목"],
       searchCondition: {
-        key: "",
-        word: "",
-        type: "",
+        key: null,
+        word: null,
+        type: null,
       },
     };
   },
