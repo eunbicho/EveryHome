@@ -7,7 +7,6 @@
         <kakao-map></kakao-map>
       </div>
       <div class="resultList">
-        검색 결과 건물 리스트
         <div class="articleFrame">
           <v-data-table
             class="housedeals"
@@ -20,14 +19,61 @@
     </div>
 
     <!-- DetailModal -->
-    <b-modal id="modal-lg" size="lg" title="상세 정보" ok-only ok-title="닫기">
+    <b-modal id="modal-lg" size="lg" title="상세 정보">
       <div class="detail-container">
         <div id="roadview" class="roadview" ref="roadview"></div>
         <div id="detail">
-          <h4 style="font-weight: bold">{{ house.buildingName }}</h4>
-          <span></span>
+          <h4 style="font-weight: bold; margin-bottom: 10px">
+            {{ house.buildingName }}
+          </h4>
+          <div class="detail-item">
+            <span class="detail-header">주소</span
+            ><span class="detail-body">{{ house.sigungu }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-header">상세 주소</span
+            ><span class="detail-body">{{ house.roadName }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-header">건물 정보</span
+            ><span class="detail-body">{{ house.type }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-header">면적</span
+            ><span class="detail-body">{{ house.area }}평</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-header">거래일자</span
+            ><span class="detail-body"
+              >{{ house.dealYM }}{{ house.dealDay }}</span
+            >
+          </div>
+          <div class="detail-item">
+            <span class="detail-header">보증금</span
+            ><span class="detail-body">{{ house.deposit }}만원</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-header">월세</span
+            ><span class="detail-body">{{ house.rent }}만원</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-header">층</span
+            ><span class="detail-body">{{ house.floor }}층</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-header">건축년도</span
+            ><span class="detail-body">{{ house.buildYear }}년</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-header">전/월세</span
+            ><span class="detail-body">{{ house.dealType }}</span>
+          </div>
         </div>
       </div>
+
+      <template #modal-footer="{ hide }">
+        <b-button @click="hide()"> 닫기 </b-button>
+      </template>
     </b-modal>
   </div>
 </template>
@@ -119,9 +165,26 @@ export default {
 </script>
 
 <style scoped>
+.detail {
+  width: 300px;
+}
+
+.detail-item {
+  margin-bottom: 5px;
+}
+
 .detail-container {
   display: flex;
   justify-content: flex-start;
+}
+
+.detail-header {
+  font-weight: bold;
+  font-size: 110%;
+}
+
+.detail-body {
+  margin-left: 15px;
 }
 
 #roadview {
@@ -131,8 +194,8 @@ export default {
 }
 
 #detail {
-  margin-top: 10px;
-  margin-left: 20px;
+  margin-top: 15px;
+  margin-left: 35px;
 }
 
 h2 {

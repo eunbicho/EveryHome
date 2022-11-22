@@ -83,7 +83,6 @@ export default {
       };
 
       var geocoder = new kakao.maps.services.Geocoder();
-      console.log(geocoder);
       this.geocoder = geocoder;
 
       //지도 객체를 등록합니다.

@@ -40,6 +40,24 @@ async function deleteUser(userId, success, fail) {
   await api.delete(`/user/${userId}`).then(success).catch(fail);
 }
 
+async function addFavorite(favorite, success, fail) {
+  await api
+    .post(`/user/favorite`, JSON.stringify(favorite))
+    .then(success)
+    .catch(fail);
+}
+
+async function listFavorite(userId, success, fail) {
+  await api.get(`/user/favorite/${userId}`).then(success).catch(fail);
+}
+
+async function deleteFavorite(param, success, fail) {
+  await api
+    .delete(`/user/favorite`, { params: param })
+    .then(success)
+    .catch(fail);
+}
+
 export {
   registerUser,
   login,
@@ -49,4 +67,7 @@ export {
   idCheck,
   modifyUser,
   deleteUser,
+  addFavorite,
+  listFavorite,
+  deleteFavorite,
 };

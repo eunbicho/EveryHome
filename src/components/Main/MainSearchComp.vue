@@ -35,6 +35,9 @@
                   @change="curDongCode"
                 ></b-form-select>
               </b-col>
+              <button class="btn-favorite" @click.prevent="favorite">
+                관심지역 추가
+              </button>
             </b-row>
           </div>
           <!-- 학교 기준 검색 (보류) -->
@@ -256,9 +259,11 @@
 <script>
 import MultiSlider from "@/components/MultiSlider.vue";
 import { sidoList, gugunList, dongList, listHouseDeal } from "@/api/house";
+//import { addFavorite } from "@/api/member";
 import { mapState, mapMutations } from "vuex";
 
 const houseStore = "houseStore";
+const memberStore = "memberStore";
 
 export default {
   components: { MultiSlider },
@@ -285,6 +290,7 @@ export default {
   },
   computed: {
     ...mapState(houseStore, ["housedeals"]),
+    ...mapState(memberStore, ["userInfo"]),
   },
   created() {
     this.clearSidoList();
@@ -378,6 +384,17 @@ export default {
           console.log(error);
         }
       );
+    },
+    favorite() {
+      if (!this.userInfo) {
+        alert("회원만 사용할 수 있는 기능입니다.");
+        return;
+      }
+
+      if (!this.searchCondition.dongCode) {
+        alert("지역을 선택해주세요.");
+        return;
+      }
     },
   },
 };
@@ -536,6 +553,22 @@ h4 {
 
   margin-top: 20px;
   margin-bottom: 30px;
+}
+
+.btn-favorite {
+  background-color: rgb(59, 175, 117);
+  border: none;
+  border-radius: 5px;
+
+  color: white;
+  font-family: "NanumBarunGothic";
+  font-weight: bold;
+
+  width: 130px;
+  height: 35px;
+
+  margin-top: 10px;
+  margin-left: 15px;
 }
 
 form {
