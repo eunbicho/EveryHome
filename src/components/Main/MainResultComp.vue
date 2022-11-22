@@ -2,6 +2,7 @@
   <div class="frame">
     <h2>이 방들은 어때요?</h2>
     <div class="resultFrame">
+      <div class="map">지도</div>
       <div class="resultList">
         검색 결과 건물 리스트
         <div class="articleFrame">
@@ -9,22 +10,37 @@
             class="housedeals"
             :headers="headers"
             :items="housedeals"
+            @click:row="detailHouse"
+            v-b-modal.modal-lg
           ></v-data-table>
         </div>
       </div>
-      <div class="map">지도</div>
     </div>
+
+    <!-- DetailModal -->
+    <b-modal id="modal-lg" size="lg" title="상세 정보" ok-only ok-title="닫기">
+      <div id="map" class="map" ref="map"></div>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-
 const houseStore = "houseStore";
 
 export default {
   computed: {
     ...mapState(houseStore, ["housedeals"]),
+  },
+  watch: {
+    road: {
+      deep: true,
+      handler() {
+        this.kakao && this.kakao.maps
+          ? this.initMap()
+          : this.addKakaoMapScript();
+      },
+    },
   },
   data() {
     return {
@@ -34,19 +50,62 @@ export default {
           align: "start",
           sortable: false,
           value: "buildingName",
-          width: "40%",
+          width: "35%",
         },
-        { text: "전/월세", value: "dealType", sortable: false, width: "10%" },
-        { text: "면적(평)", value: "area", width: "10%" },
-        { text: "보증금", value: "deposit", width: "20%" },
-        { text: "월세", value: "rent", width: "10%" },
+        { text: "전/월세", value: "dealType", sortable: false, width: "17%" },
+        { text: "면적(평)", value: "area", width: "18%" },
+        { text: "보증금", value: "deposit", width: "15%" },
+        { text: "월세", value: "rent", width: "15%" },
       ],
+      house: {},
+      road: "",
     };
+  },
+  methods: {
+    detailHouse(event, { item }) {
+      this.house = item;
+      this.road = this.house.sigungu + " " + this.house.roadName;
+      console.log(this.house);
+    },
+    addKakaoMapScript() {
+      console.log("addKakaoMapScript called.");
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=67a84eba9ba18c291dbbc6e7ddce22df&libraries=services`;
+      document.head.appendChild(script);
+    },
+    initMap() {
+      console.log("initMap called.");
+      var geocoder = new kakao.maps.services.Geocoder();
+
+      geocoder.addressSearch(this.road, function (result, status) {
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+          var roadviewContainer = document.getElementById("map"); //로드뷰를 표시할 div
+          var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+          var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+
+          var position = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+          // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+          roadviewClient.getNearestPanoId(position, 50, function (panoId) {
+            roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+          });
+        }
+      });
+    },
   },
 };
 </script>
 
 <style scoped>
+#map {
+  width: 400px;
+  height: 400px;
+  border-radius: 20px;
+}
+
 h2 {
   margin-bottom: 5px;
   font-weight: bold;
@@ -73,7 +132,6 @@ h2 {
 }
 
 .resultList {
-  height: 500px;
   background-color: beige;
   padding: 10px;
 }

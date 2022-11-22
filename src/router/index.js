@@ -1,11 +1,11 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import MainView from '../views/MainView.vue'
-import LoginRegisterView from '../views/LoginRegisterView'
-import BoardView from '../views/BoardView'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import MainView from "../views/MainView.vue";
+import LoginRegisterView from "../views/LoginRegisterView";
+import BoardView from "../views/BoardView";
 import store from "@/store";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const onlyAuthUser = async (to, from, next) => {
   const checkUserInfo = store.getters["memberStore/checkUserInfo"];
@@ -29,19 +29,18 @@ const onlyAuthUser = async (to, from, next) => {
 
 const routes = [
   {
-    path: '/',
-    name: 'main',
-    component: MainView
+    path: "/",
+    name: "main",
+    component: MainView,
   },
   {
-    path: '/login',
-    name: 'login',
-    component: LoginRegisterView
-
+    path: "/login",
+    name: "login",
+    component: LoginRegisterView,
   },
   {
-    path: '/board',
-    name: 'board',
+    path: "/board",
+    name: "board",
     beforeEnter: onlyAuthUser,
     component: BoardView,
     redirect: "/board/list",
@@ -54,13 +53,13 @@ const routes = [
       {
         path: "write",
         name: "boardwrite",
-        
+
         component: () => import("@/components/Board/BoardWriteComp"),
       },
       {
         path: "detail",
         name: "boarddetail",
-        
+
         component: () => import("@/components/Board/BoardDetailComp"),
       },
       // {
@@ -72,7 +71,7 @@ const routes = [
       // {
       //   path: "modify",
       //   name: "boardmodify",
-        
+
       //   component: () => import("@/components/board/BoardModify"),
       // },
       // {
@@ -82,12 +81,11 @@ const routes = [
       //   component: () => import("@/components/board/BoardDelete"),
       // },
     ],
-
   },
-]
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
