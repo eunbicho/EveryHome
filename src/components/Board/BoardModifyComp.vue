@@ -5,7 +5,7 @@
         <div class="group">
           <v-card-title>[제목]</v-card-title>
           <v-text-field
-            label="제목을 입력해주세요."
+            label=""
             single-line
             outlined
             hide-details=""
@@ -16,7 +16,7 @@
         <div class="options">
           <div class="optionsLeft">
             <b-form-select
-              v-model="selectedType"
+              v-model="article.type"
               :options="types"
               style="margin-left: 20px"
             ></b-form-select>
@@ -33,7 +33,7 @@
         ></v-textarea>
         <div class="bottom">
           <v-card-actions>
-            <v-btn outlined id="click" @click="write">작성완료</v-btn>
+            <v-btn outlined id="click" @click="modify">수정완료</v-btn>
           </v-card-actions>
         </div>
       </v-card>
@@ -42,25 +42,38 @@
 </template>
 
 <script>
-import { writeArticle } from "@/api/board";
+import { selectArticle, modifyArticle } from "@/api/board";
 import { mapState } from "vuex";
 
 const memberStore = "memberStore";
 
 export default {
+  created() {
+    selectArticle(
+      this.$route.params.articleNo,
+      ({ data }) => {
+        this.article = data;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    this.selectedType = this.article.type;
+    console.log(this.article);
+  },
   computed: {
     ...mapState(memberStore, ["userInfo"]),
   },
   methods: {
-    write() {
+    modify() {
       this.article.userId = this.userInfo.userId;
       this.article.type = this.selectedType;
 
-      writeArticle(
+      modifyArticle(
         this.article,
         ({ data }) => {
           if (data === "success") {
-            alert("등록이 완료되었습니다.");
+            alert("수정이 완료되었습니다.");
             this.moveList();
           }
         },

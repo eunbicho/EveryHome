@@ -41,14 +41,42 @@
       </div>
     </v-card-title>
 
-    <div class="articleFrame">
+    <div class="articleFrame" style="position: relative">
       <v-data-table
         class="articles"
         :headers="headers"
         :items="articles"
         :search="search"
-        @click:row="test"
+        @click:row="toDetail"
       ></v-data-table>
+      <!-- 글작성 floating 버튼-->
+
+      <v-fab-transition>
+        <v-btn
+          v-show="!hidden"
+          color="rgb(157, 196, 157)"
+          dark
+          absolute
+          top
+          right
+          fab
+          @click="write"
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              position: relative;
+            "
+          >
+            <v-icon>mdi-plus</v-icon>
+            <label style="margin-top: 50px; position: absolute; color: green"
+              >글쓰기</label
+            >
+          </div>
+        </v-btn>
+      </v-fab-transition>
     </div>
   </v-card>
 </template>
@@ -74,8 +102,18 @@ export default {
         }
       );
     },
-    test(event, { item }) {
-      console.log(item);
+    toDetail(event, { item }) {
+      // console.log(item);
+      //<router-link :to="{ name: 'boardview', params: { articleno: data.item.articleno } }">
+      this.$router.push({
+        name: "boarddetail",
+        params: { articleNo: item.articleNo },
+      });
+    },
+    write() {
+      this.$router.push({
+        name: "boardwrite",
+      });
     },
   },
   created() {
@@ -127,6 +165,27 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: "NanumBarunGothic";
+  font-style: normal;
+  font-weight: 700;
+  src: url("//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot");
+  src: url("//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot?#iefix")
+      format("embedded-opentype"),
+    url("//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.woff")
+      format("woff"),
+    url("//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.ttf")
+      format("truetype");
+}
+
+@font-face {
+  font-family: "KOTRA_GOTHIC";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/KOTRA_GOTHIC.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .frame {
   display: flex;
   flex-direction: column;
@@ -136,8 +195,8 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-top: 50px;
-  margin-left: 270px;
-  margin-right: 270px;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 
 .articles {
@@ -175,6 +234,11 @@ row align-center {
   width: 500px;
 }
 
+h2 {
+  font-family: "KOTRA_GOTHIC";
+  width: fit-content;
+}
+
 h4 {
   color: gray;
 }
@@ -185,5 +249,16 @@ h4 {
 
 .v-messages theme--light {
   display: none;
+}
+
+#table .v-data-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+}
+
+#table .v-data-table__wrapper {
+  margin-bottom: 60px;
 }
 </style>

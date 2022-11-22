@@ -58,29 +58,17 @@ const routes = [
         component: () => import("@/components/Board/BoardWriteComp"),
       },
       {
-        path: "detail",
+        path: "detail/:articleNo",
         name: "boarddetail",
         
         component: () => import("@/components/Board/BoardDetailComp"),
       },
-      // {
-      //   path: "view/:articleno",
-      //   name: "boardview",
-
-      //   component: () => import("@/components/Board/BoardDetailComp"),
-      // },
-      // {
-      //   path: "modify",
-      //   name: "boardmodify",
+      {
+        path: "modify/:articleNo",
+        name: "boardmodify",
         
-      //   component: () => import("@/components/board/BoardModify"),
-      // },
-      // {
-      //   path: "delete/:articleno",
-      //   name: "boarddelete",
-
-      //   component: () => import("@/components/board/BoardDelete"),
-      // },
+        component: () => import("@/components/Board/BoardModifyComp"),
+      },
     ],
 
   },
