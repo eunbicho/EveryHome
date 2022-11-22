@@ -2,7 +2,10 @@
   <div class="frame">
     <h2>이 방들은 어때요?</h2>
     <div class="resultFrame">
-      <div class="map">지도</div>
+      <!-- <div class="map">지도</div> -->
+      <div class="map-container">
+        <kakao-map></kakao-map>
+      </div>
       <div class="resultList">
         검색 결과 건물 리스트
         <div class="articleFrame">
@@ -11,7 +14,6 @@
             :headers="headers"
             :items="housedeals"
             @click:row="detailHouse"
-            v-b-modal.modal-lg
           ></v-data-table>
         </div>
       </div>
@@ -19,28 +21,23 @@
 
     <!-- DetailModal -->
     <b-modal id="modal-lg" size="lg" title="상세 정보" ok-only ok-title="닫기">
-      <div id="map" class="map" ref="map"></div>
+      <div id="roadview" class="roadview" ref="roadview"></div>
     </b-modal>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import KakaoMap from "@/components/KakaoMap.vue";
+
 const houseStore = "houseStore";
 
 export default {
+  components: {
+    KakaoMap,
+  },
   computed: {
     ...mapState(houseStore, ["housedeals"]),
-  },
-  watch: {
-    road: {
-      deep: true,
-      handler() {
-        this.kakao && this.kakao.maps
-          ? this.initMap()
-          : this.addKakaoMapScript();
-      },
-    },
   },
   data() {
     return {
@@ -59,13 +56,29 @@ export default {
       ],
       house: {},
       road: "",
+      markerPositions: [],
     };
+  },
+  watch: {
+    housedeals: {
+      handler() {
+        console.log("housedeals changed");
+        console.log(this.housedeals);
+      },
+    },
   },
   methods: {
     detailHouse(event, { item }) {
       this.house = item;
       this.road = this.house.sigungu + " " + this.house.roadName;
       console.log(this.house);
+
+      if (this.kakao && this.kakao.maps) {
+        this.initMap();
+      } else {
+        this.addKakaoMapScript();
+      }
+      this.$bvModal.show("modal-lg");
     },
     addKakaoMapScript() {
       console.log("addKakaoMapScript called.");
@@ -82,7 +95,7 @@ export default {
       geocoder.addressSearch(this.road, function (result, status) {
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
-          var roadviewContainer = document.getElementById("map"); //로드뷰를 표시할 div
+          var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
           var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
           var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
 
@@ -100,7 +113,7 @@ export default {
 </script>
 
 <style scoped>
-#map {
+#roadview {
   width: 400px;
   height: 400px;
   border-radius: 20px;
@@ -134,10 +147,24 @@ h2 {
 .resultList {
   background-color: beige;
   padding: 10px;
+  border-radius: 20px;
+  margin-left: 15px;
 }
 
 .map {
   background-color: greenyellow;
   padding: 10px;
+}
+
+.articleFrame {
+  width: 650px;
+}
+
+.map-container {
+  justify-content: center;
+  align-content: center;
+  margin-right: 15px;
+  width: 650px;
+  height: 650px;
 }
 </style>
