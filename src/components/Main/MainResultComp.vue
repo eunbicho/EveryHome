@@ -21,7 +21,13 @@
 
     <!-- DetailModal -->
     <b-modal id="modal-lg" size="lg" title="상세 정보" ok-only ok-title="닫기">
-      <div id="roadview" class="roadview" ref="roadview"></div>
+      <div class="detail-container">
+        <div id="roadview" class="roadview" ref="roadview"></div>
+        <div id="detail">
+          <h4 style="font-weight: bold">{{ house.buildingName }}</h4>
+          <span></span>
+        </div>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -113,10 +119,20 @@ export default {
 </script>
 
 <style scoped>
+.detail-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
 #roadview {
   width: 400px;
   height: 400px;
   border-radius: 20px;
+}
+
+#detail {
+  margin-top: 10px;
+  margin-left: 20px;
 }
 
 h2 {
