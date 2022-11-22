@@ -7,57 +7,28 @@
 
     <h2>원하는 방을 찾아보세요!</h2>
     <div class="searchFrame">
-      <form>
-        <div class="searchCondition">
-          <div
-            style="
-              width: fit-content;
-              margin-right: 10px;
-              display: flex;
-              flex-direction: row;
-            "
-          >
-            <input type="radio" name="search" id="univ" /><label for="univ"
-              >대학교 기준으로 검색</label
-            >
-          </div>
-          <div
-            style="
-              width: fit-content;
-              margin-right: 10px;
-              display: flex;
-              flex-direction: row;
-            "
-          >
-            <input
-              type="radio"
-              name="search"
-              checked="checked"
-              id="region"
-            /><label for="region">지역 기준으로 검색</label>
-          </div>
-        </div>
-
+      <form class="searchForm">
         <!-- 선택한 조건들 전체를 묶는 conditions-->
         <div class="conditions">
-          <div style="margin-left: 10px; margin-top: 20px">
+          <div style="margin-left: 35px; margin-top: 20px">
             <h4><i class="bx bx-dollar-circle icon"></i> 지역 선택</h4>
             <b-row class="mt-4 mb-4 text-center">
-              <b-col class="sm-3">
+              <b-col>
                 <b-form-select
                   v-model="sidoCode"
                   :options="sidos"
                   @change="getGugun"
+                  style="margin-left: 20px"
                 ></b-form-select>
               </b-col>
-              <b-col class="sm-3">
+              <b-col>
                 <b-form-select
                   v-model="gugunCode"
                   :options="guguns"
                   @change="getDong"
                 ></b-form-select>
               </b-col>
-              <b-col class="sm-3">
+              <b-col>
                 <b-form-select
                   v-model="dongCode"
                   :options="dongs"
@@ -68,196 +39,215 @@
           </div>
           <!-- 학교 기준 검색 (보류) -->
 
-          <!-- 보증금 선택 -->
-          <div class="select">
-            <h4><i class="bx bx-dollar-circle icon"></i> 보증금</h4>
-            <multi-slider
-              class="slider"
-              low="300"
-              high="1000"
-              min="0"
-              max="5000"
-              unit="만원"
-              step="50"
-              @slide-change="setCondition"
-              style="margin-left: 30px"
-            ></multi-slider>
-          </div>
-
-          <!-- 월세 검색 -->
-          <div class="select">
-            <h4><i class="bx bx-money icon"></i> 월세 금액</h4>
-            <multi-slider
-              class="slider"
-              low="30"
-              high="50"
-              min="0"
-              max="150"
-              unit="만원"
-              step="5"
-              @slide-change="setCondition"
-              style="margin-left: 30px"
-            ></multi-slider>
-          </div>
-
-          <!-- 평수 검색 -->
-          <div class="select">
-            <h4><i class="bx bx-home icon"></i> 평수</h4>
-            <multi-slider
-              class="slider"
-              low="5"
-              high="15"
-              min="0"
-              max="40"
-              unit="평"
-              step="1"
-              @slide-change="setCondition"
-              style="margin-left: 30px"
-            ></multi-slider>
-          </div>
-
-          <!-- 전월세 선택 -->
-          <div class="rent">
-            <h4><i class="bx bx-select-multiple icon"></i> 전/월세</h4>
-            <div
-              style="
-                display: flex;
-                flex-direction: row;
-                margin-top: 10px;
-                margin-bottom: 15px;
-              "
-            >
-              <div
-                style="margin-right: 10px; display: flex; flex-direction: row"
-              >
-                <input
-                  type="radio"
-                  name="dealtype"
-                  id="all"
-                  checked="checked"
-                  v-model="searchCondition.dealType"
-                  value="0"
-                /><label for="all">전체</label>
-              </div>
-              <div
-                style="
-                  width: fit-content;
-                  margin-right: 10px;
-                  display: flex;
-                  flex-direction: row;
-                "
-              >
-                <input
-                  type="radio"
-                  name="dealtype"
-                  id="j"
-                  v-model="searchCondition.dealType"
-                  value="1"
-                /><label for="j">전세</label>
-              </div>
-              <div
-                style="
-                  width: fit-content;
-                  margin-right: 10px;
-                  display: flex;
-                  flex-direction: row;
-                "
-              >
-                <input
-                  type="radio"
-                  name="dealtype"
-                  id="w"
-                  v-model="searchCondition.dealType"
-                  value="2"
-                /><label for="w">월세</label>
+          <div class="container">
+            <div class="item">
+              <!-- 보증금 선택 -->
+              <div class="select">
+                <h4><i class="bx bx-dollar-circle icon"></i> 보증금</h4>
+                <multi-slider
+                  class="slider"
+                  low="300"
+                  high="1000"
+                  min="0"
+                  max="5000"
+                  unit="만원"
+                  step="50"
+                  @slide-change="setCondition"
+                  style="margin-left: 30px"
+                ></multi-slider>
               </div>
             </div>
-          </div>
 
-          <!-- 주택 종류 선택 -->
-          <div class="hometype">
-            <h4><i class="bx bx-select-multiple icon"></i> 집 종류</h4>
-            <div
-              style="
-                display: flex;
-                flex-direction: row;
-                margin-top: 10px;
-                margin-bottom: 15px;
-              "
-            >
-              <div
-                style="
-                  width: fit-content;
-                  margin-right: 10px;
-                  display: flex;
-                  flex-direction: row;
-                "
-              >
-                <input
-                  type="radio"
-                  name="hometype"
-                  id="all2"
-                  checked="checked"
-                  v-model="searchCondition.type"
-                  value="0"
-                /><label for="all2">전체</label>
+            <div class="item">
+              <!-- 월세 검색 -->
+              <div class="select">
+                <h4><i class="bx bx-money icon"></i> 월세 금액</h4>
+                <multi-slider
+                  class="slider"
+                  low="30"
+                  high="50"
+                  min="0"
+                  max="150"
+                  unit="만원"
+                  step="5"
+                  @slide-change="setCondition"
+                  style="margin-left: 30px"
+                ></multi-slider>
               </div>
-              <div
-                style="
-                  width: fit-content;
-                  margin-right: 10px;
-                  display: flex;
-                  flex-direction: row;
-                "
-              >
-                <input
-                  type="radio"
-                  name="hometype"
-                  id="y"
-                  v-model="searchCondition.type"
-                  value="1"
-                /><label for="y">연립다세대</label>
+            </div>
+
+            <div class="item">
+              <!-- 평수 검색 -->
+              <div class="select">
+                <h4><i class="bx bx-home icon"></i> 평수</h4>
+                <multi-slider
+                  class="slider"
+                  low="5"
+                  high="15"
+                  min="0"
+                  max="40"
+                  unit="평"
+                  step="1"
+                  @slide-change="setCondition"
+                  style="margin-left: 30px"
+                ></multi-slider>
               </div>
-              <div
-                style="
-                  width: fit-content;
-                  margin-right: 10px;
-                  display: flex;
-                  flex-direction: row;
-                "
-              >
-                <input
-                  type="radio"
-                  name="hometype"
-                  id="apart"
-                  v-model="searchCondition.type"
-                  value="2"
-                /><label for="apart">아파트</label>
+            </div>
+
+            <div class="item">
+              <!-- 전월세 선택 -->
+              <div class="rent">
+                <h4><i class="bx bx-select-multiple icon"></i> 전/월세</h4>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    margin-top: 10px;
+                    margin-bottom: 15px;
+                  "
+                >
+                  <div
+                    style="
+                      margin-right: 10px;
+                      display: flex;
+                      flex-direction: row;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      name="dealtype"
+                      id="all"
+                      checked="checked"
+                      v-model="searchCondition.dealType"
+                      value="0"
+                    /><label for="all">전체</label>
+                  </div>
+                  <div
+                    style="
+                      width: fit-content;
+                      margin-right: 10px;
+                      display: flex;
+                      flex-direction: row;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      name="dealtype"
+                      id="j"
+                      v-model="searchCondition.dealType"
+                      value="1"
+                    /><label for="j">전세</label>
+                  </div>
+                  <div
+                    style="
+                      width: fit-content;
+                      margin-right: 10px;
+                      display: flex;
+                      flex-direction: row;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      name="dealtype"
+                      id="w"
+                      v-model="searchCondition.dealType"
+                      value="2"
+                    /><label for="w">월세</label>
+                  </div>
+                </div>
               </div>
-              <div
-                style="
-                  width: fit-content;
-                  margin-right: 10px;
-                  display: flex;
-                  flex-direction: row;
-                "
-              >
-                <input
-                  type="radio"
-                  name="hometype"
-                  id="ot"
-                  v-model="searchCondition.type"
-                  value="3"
-                /><label for="ot">오피스텔</label>
+
+              <!-- 주택 종류 선택 -->
+              <div class="hometype">
+                <h4><i class="bx bx-select-multiple icon"></i> 집 종류</h4>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    margin-top: 10px;
+                    margin-bottom: 15px;
+                  "
+                >
+                  <div
+                    style="
+                      width: fit-content;
+                      margin-right: 10px;
+                      display: flex;
+                      flex-direction: row;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      name="hometype"
+                      id="all2"
+                      checked="checked"
+                      v-model="searchCondition.type"
+                      value="0"
+                    /><label for="all2">전체</label>
+                  </div>
+                  <div
+                    style="
+                      width: fit-content;
+                      margin-right: 10px;
+                      display: flex;
+                      flex-direction: row;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      name="hometype"
+                      id="y"
+                      v-model="searchCondition.type"
+                      value="1"
+                    /><label for="y">연립다세대</label>
+                  </div>
+                  <div
+                    style="
+                      width: fit-content;
+                      margin-right: 10px;
+                      display: flex;
+                      flex-direction: row;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      name="hometype"
+                      id="apart"
+                      v-model="searchCondition.type"
+                      value="2"
+                    /><label for="apart">아파트</label>
+                  </div>
+                  <div
+                    style="
+                      width: fit-content;
+                      margin-right: 10px;
+                      display: flex;
+                      flex-direction: row;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      name="hometype"
+                      id="ot"
+                      v-model="searchCondition.type"
+                      value="3"
+                    /><label for="ot">오피스텔</label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="mrent" ondblclick="this.checked=false"></div>
-        <div class="area"></div>
-
-        <button class="searchBtn" @click.prevent="search">방 둘러보기</button>
+        <div class="search-btn-container">
+          <button
+            class="searchBtn"
+            @click.prevent="search"
+            style="margin-right: 15px"
+          >
+            방 둘러보기
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -266,6 +256,9 @@
 <script>
 import MultiSlider from "@/components/MultiSlider.vue";
 import { sidoList, gugunList, dongList, listHouseDeal } from "@/api/house";
+import { mapState, mapMutations } from "vuex";
+
+const houseStore = "houseStore";
 
 export default {
   components: { MultiSlider },
@@ -290,6 +283,9 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState(houseStore, ["housedeals"]),
+  },
   created() {
     this.clearSidoList();
     sidoList(
@@ -304,6 +300,7 @@ export default {
     );
   },
   methods: {
+    ...mapMutations(houseStore, ["SET_HOUSEDEALS"]),
     getGugun() {
       this.clearGugunList();
       this.clearDongList();
@@ -363,13 +360,19 @@ export default {
       console.log(this.searchCondition);
     },
     search() {
+      if (!this.searchCondition.dongCode) {
+        alert("지역을 선택해주세요.");
+        return;
+      }
+
       this.searchCondition.dealType = parseInt(this.searchCondition.dealType);
       this.searchCondition.type = parseInt(this.searchCondition.type);
 
       listHouseDeal(
         this.searchCondition,
         ({ data }) => {
-          console.log(data);
+          // console.log(data);
+          this.SET_HOUSEDEALS(data);
         },
         (error) => {
           console.log(error);
@@ -459,7 +462,7 @@ export default {
 .searchFrame {
   background-color: white;
   box-shadow: 1px 1px 20px 1px rgb(234, 234, 234);
-  width: 800px;
+  width: 1500px;
   height: fit-content;
 
   display: flex;
@@ -473,12 +476,10 @@ export default {
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  margin-bottom: 50px;
-  margin-left: 10px;
 }
 
 .slider {
-  width: 300px;
+  width: 500px;
   margin-top: 50px;
 }
 
@@ -500,6 +501,7 @@ h4 {
   flex-direction: column;
   width: 100%;
   margin-top: 10px;
+  padding-bottom: 20px;
 }
 
 .searchCondition {
@@ -557,7 +559,7 @@ form {
 
 /* select box 디자인 */
 select {
-  width: 180px;
+  width: 250px;
   margin: 0.5em auto 2em auto;
   display: block;
   height: 40px;
@@ -574,5 +576,31 @@ label {
   font-family: "NanumBarunGothic";
   font-weight: bold;
   margin-left: 10px;
+}
+
+.searchForm {
+  width: 1300px;
+}
+
+.col {
+  flex-grow: 0;
+  height: 60px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  margin: 0 0 0 0;
+}
+
+.item {
+  margin-left: 20px;
+}
+
+.search-btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
