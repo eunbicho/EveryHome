@@ -57,7 +57,9 @@
                   >{{ userInfo.userName }} 님</span
                 >
               </template>
-              <b-dropdown-item href="#">관심지역</b-dropdown-item>
+              <b-dropdown-item href="#" @click="toFavorite"
+                >관심지역</b-dropdown-item
+              >
               <b-dropdown-item href="#" @click="toDetail"
                 >회원정보 수정</b-dropdown-item
               >
@@ -115,6 +117,9 @@ export default {
     },
     toDetail() {
       this.$router.push({ path: "/detail" });
+    },
+    toFavorite() {
+      this.$router.push({ path: "/favorite" });
     },
   },
 };

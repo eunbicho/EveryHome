@@ -69,7 +69,9 @@ export default {
     },
     markerPositions: {
       handler() {
-        this.displayMarker(this.markerPositions, this.contents);
+        if (this.markerPositions.length == this.housedeals.length) {
+          this.displayMarker(this.markerPositions, this.contents);
+        }
       },
     },
   },
@@ -112,6 +114,7 @@ export default {
           map: this.map, // 마커를 표시할 지도
           position: positions[i], // 마커의 위치
         });
+        this.markers.push(marker);
 
         // 마커에 표시할 인포윈도우를 생성합니다
         var infowindow = new kakao.maps.InfoWindow({
