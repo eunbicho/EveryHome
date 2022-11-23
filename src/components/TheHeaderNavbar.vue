@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <!-- <div>
     <router-link to="/" class="left">로고</router-link>
     <div class="right">
       <nav class="navBar beforeLogin" v-if="userInfo == null">
@@ -26,6 +26,52 @@
         <router-link to="/board" v-if="userInfo != null">게시판</router-link>
       </nav>
     </div>
+  </div> -->
+  <div>
+    <b-navbar id="header-nav-bar" toggleable="xl" type="dark" variant="success">
+      <b-navbar-brand href="#" @click="toHome" style="font-size: 23px">
+        <img
+          src="https://placekitten.com/g/30/30"
+          class="d-inline-block align-top"
+          alt="Kitten"
+          style="margin-right: 5px"
+        />
+        EveryHome
+      </b-navbar-brand>
+
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+      <b-collapse id="nav-collapse" is-nav>
+        <!-- <b-navbar-nav>
+          <b-nav-item href="#">Link</b-nav-item>
+          <b-nav-item href="#" disabled>Disabled</b-nav-item>
+        </b-navbar-nav> -->
+
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <div @mouseover="onOver" @mouseleave="onLeave">
+            <b-nav-item-dropdown ref="dropdown" right v-if="userInfo != null">
+              <!-- Using 'button-content' slot -->
+              <template #button-content>
+                <span style="font-weight: bold; font-size: 16px; color: white"
+                  >{{ userInfo.userName }} 님</span
+                >
+              </template>
+              <b-dropdown-item href="#">관심지역</b-dropdown-item>
+              <b-dropdown-item href="#" @click="toDetail"
+                >회원정보 수정</b-dropdown-item
+              >
+            </b-nav-item-dropdown>
+          </div>
+          <b-nav-item href="#" v-if="userInfo != null" @click="onClickLogout"
+            >로그아웃</b-nav-item
+          >
+          <b-nav-item href="#" v-if="userInfo == null" @click="onClickLogin"
+            >로그인 / 회원가입</b-nav-item
+          >
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
   </div>
 </template>
 
@@ -55,6 +101,21 @@ export default {
       sessionStorage.removeItem("refresh-token"); //저장된 토큰 없애기
       if (this.$route.path != "/") this.$router.push({ name: "main" });
     },
+    toHome() {
+      this.$router.push({ path: "/" });
+    },
+    onClickLogin() {
+      this.$router.push({ path: "/login" });
+    },
+    onOver() {
+      this.$refs.dropdown.visible = true;
+    },
+    onLeave() {
+      this.$refs.dropdown.visible = false;
+    },
+    toDetail() {
+      this.$router.push({ path: "/detail" });
+    },
   },
 };
 </script>
@@ -66,6 +127,10 @@ export default {
   margin-left: 5px;
 }
 
+.bg-success {
+  background-color: rgb(59, 175, 117) !important;
+}
+
 .background {
   display: flex;
   justify-content: space-between;
@@ -74,9 +139,19 @@ export default {
   padding-right: 20px;
 
   background-color: white;
-  width: 600px;
+  width: 1500px;
   height: 50px;
   border-radius: 5px;
+}
+
+.nav-link {
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: white;
 }
 
 .left {

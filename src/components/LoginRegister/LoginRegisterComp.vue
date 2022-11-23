@@ -6,12 +6,8 @@
     />
 
     <div class="login">
+      <img id="login-bg-img" src="@/assets/loginImg.jpg" alt="user login" />
       <div class="login__content">
-        <div class="login__img">
-          <div class="container">
-            <img src="@/assets/loginImg.jpg" alt="user login" />
-          </div>
-        </div>
         <div class="login__forms">
           <!-- login form -->
           <form action="" class="login__register" id="login-in">
@@ -32,6 +28,7 @@
                 placeholder="비밀번호"
                 class="login__input"
                 v-model="user.userPwd"
+                @keyup.enter="confirm"
               />
             </div>
 
@@ -342,6 +339,12 @@ $small-font-size: 0.813rem;
 ::after {
   box-sizing: border-box;
 }
+
+#login-bg-img {
+  z-index: 0 !important;
+  position: absolute;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -365,11 +368,18 @@ img {
   display: grid;
   grid-template-columns: 100%;
   height: 100vh;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  margin: 0 !important;
+
+  position: relative !important;
+  align-items: flex-start;
+  justify-items: center;
 
   &__content {
     display: grid;
+    z-index: 2 !important;
+    position: absolute;
+    margin: 0 !important;
+    margin-top: 100px !important;
   }
   &__img {
     justify-self: center;
@@ -385,7 +395,7 @@ img {
   }
   &__register,
   &__create {
-    position: absolute;
+    position: static !important;
     bottom: 1rem;
     width: 100%;
     background-color: $color-lighten;

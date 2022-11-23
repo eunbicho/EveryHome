@@ -1,7 +1,7 @@
 <template>
   <div class="frame">
+    <the-header-navbar></the-header-navbar>
     <img class="mainImg" src="@/assets/main3.jpg" />
-    <the-header-navbar class="navBar"></the-header-navbar>
     <div class="mainTitle">
       <h3>대학생들을 위한</h3>
       <h3 style="color: beige; margin-top: -1px">자취방 커뮤니티</h3>
@@ -44,23 +44,20 @@ export default {
   position: relative;
 }
 
-.navBar {
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 .mainTitle {
   position: absolute;
   top: 180px;
   left: 35px;
-  font-size: 3rem;
+
   color: white;
   text-shadow: 1px 1px black;
   display: flex;
   flex-direction: column;
   margin: 0;
+}
+
+.mainTitle h3 {
+  font-size: 3rem;
 }
 
 h3 {
