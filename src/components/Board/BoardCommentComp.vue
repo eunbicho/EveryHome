@@ -19,8 +19,8 @@
         <!-- 오른쪽 섹션 (작성자 이름, 작성날짜, 작성내용) -->
         <div class="right">
           <div class="head">
-            <v-card-text class="commentId">ssafy</v-card-text>
-            <v-card-text class="commentDate">22-11-23</v-card-text>
+            <v-card-text class="commentId">{{comment.userId}}</v-card-text>
+            <v-card-text class="commentDate">{{comment.regTime}}</v-card-text>
             <!--수정 삭제 버튼-->
             <div class="buttons">
               <div>
@@ -34,7 +34,7 @@
           </div>
           <v-card outlined class="contents" height="fit-content">
             <v-card-text>
-              <div>댓글이다!</div>
+              <div>{{comment.content}}</div>
             </v-card-text>
           </v-card>
         </div>
@@ -42,7 +42,7 @@
           <!-- 추천 버튼-->
           <v-btn outlined :color="btnColor" @click="likeToggleComment">
             <v-icon :color="iconColor"> mdi-heart </v-icon>
-            <div style="margin-left: 2px">6</div></v-btn
+            <div style="margin-left: 2px">{{comment.likes}}</div></v-btn
           >
         </div>
       </v-card>
@@ -51,7 +51,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props:{
+    comment: Object
+  }
+};
 </script>
 
 <style scoped>

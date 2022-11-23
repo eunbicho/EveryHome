@@ -66,6 +66,7 @@ export default {
   },
   methods: {
     writeComment() {
+      console.log("이 번호 게시물에 댓글을 남겼습니다.",this.curArticle.articleNo)
       this.comment.articleNo = this.curArticle.articleNo;
       this.comment.userId = this.userInfo.userId;
       console.log(this.userInfo.userId);
@@ -73,7 +74,23 @@ export default {
         this.comment,
         ({ data }) => {
           if (data === "success") {
-            alert("댓글 작성완료!");
+            if (confirm("댓글 작성완료!")) {
+              this.$router.go();
+            }
+            // listComment(
+            //   this.articleNo,
+            //   ({ data }) => {
+            //     // 댓글 목록 뿌려주기
+            //     // console.log("listComment", data);
+            //     this.commentList = data;
+            //     // console.log("commentList", this.commentList);
+            //     // this.comments = data;
+            //   },
+            //   (error) => {
+            //     console.log("listComment", error);
+            //   }
+            // );
+
             this.moveDetail();
           }
           console.log(data);

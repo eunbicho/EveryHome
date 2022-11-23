@@ -62,6 +62,7 @@
     <board-comment-comp
       v-for="comment in commentList"
       :key="comment.commentNo"
+      :comment="comment"
     ></board-comment-comp>
   </div>
 </template>
@@ -75,11 +76,12 @@ import {
   unlikeArticle,
   listComment,
 } from "@/api/board";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations} from "vuex";
 import BoardCommentComp from "@/components/Board/BoardCommentComp.vue";
 import BoardCommentWriteComp from "@/components/Board/BoardCommentWriteComp.vue";
 const memberStore = "memberStore";
 const boardStore = "boardStore";
+
 
 export default {
   components: {
@@ -87,7 +89,7 @@ export default {
     BoardCommentWriteComp,
   },
   methods: {
-    ...mapMutations(boardStore, ["SET_ARTICLE"]),
+    ...mapMutations(["SET_ARTICLE"]),
     deleteArticle() {
       deleteArticle(
         this.articleNo,
@@ -150,6 +152,9 @@ export default {
         }
       );
     },
+
+
+
     moveList() {
       this.$router.push({ name: "boardlist" });
     },
@@ -157,6 +162,7 @@ export default {
   computed: {
     ...mapState(memberStore, ["userInfo"]),
     ...mapState(boardStore, ["curArticle"]),
+    ...mapState(boardStore, ["comments"])
   },
   data() {
     return {
@@ -183,16 +189,22 @@ export default {
       },
     };
   },
+  mounted(){
+    this.SET_ARTICLE(this.article)
+  },
   created() {
     // 선택한 게시물 가져오기
     this.articleNo = this.$route.params.articleNo;
-    console.log(this.articleNo);
+    console.log("현재 게시글 번호", this.articleNo);
+    
+    
+    console.log("변경한 curArticle 번호", this.curArticle);
     selectArticle(
       this.articleNo,
       ({ data }) => {
         this.article = data;
-        this.SET_ARTICLE(this.article);
-        console.log("curArticle", this.curArticle);
+        console.log("현재 게시물 정보", this.article)
+        
       },
       (error) => {
         console.log(error);
@@ -203,9 +215,10 @@ export default {
       this.articleNo,
       ({ data }) => {
         // 댓글 목록 뿌려주기
-        console.log("listComment", data);
+        // console.log("listComment", data);
         this.commentList = data;
-        console.log("commentList", this.commentList);
+        // console.log("commentList", this.commentList);
+        // this.comments = data;
       },
       (error) => {
         console.log("listComment", error);
