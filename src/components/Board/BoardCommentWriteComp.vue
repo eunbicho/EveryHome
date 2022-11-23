@@ -74,6 +74,7 @@ export default {
         ({ data }) => {
           if (data === "success") {
             alert("댓글 작성완료!");
+            this.moveDetail();
           }
           console.log(data);
         },
@@ -81,6 +82,9 @@ export default {
           console.log(error);
         }
       );
+    },
+    moveDetail() {
+      this.$router.push({ name: "boarddetail" });
     },
   },
 };

@@ -44,8 +44,8 @@ function writeComment(comment, success, fail) {
   api.post(`/comment`, JSON.stringify(comment)).then(success).catch(fail);
 }
 
-function listComment(articleNo, param, success, fail) {
-  api.get(`/comment/${articleNo}`, { params: param }).then(success).catch(fail);
+function listComment(articleNo, success, fail) {
+  api.get(`/comment/${articleNo}`, JSON.stringify(articleNo)).then(success).catch(fail);
 }
 
 function modifyComment(comment, success, fail) {

@@ -58,9 +58,11 @@
       </v-card>
     </v-container>
 
-    <!-- 댓글 작성 컴포넌트로 게시글 번호랑 사용자 아이디 넘겨주기-->
     <board-comment-write-comp></board-comment-write-comp>
-    <board-comment-comp></board-comment-comp>
+    <board-comment-comp
+      v-for="comment in commentList"
+      :key="comment.commentNo"
+    ></board-comment-comp>
   </div>
 </template>
 
@@ -71,6 +73,7 @@ import {
   likeArticle,
   checkArticleLike,
   unlikeArticle,
+  listComment,
 } from "@/api/board";
 import { mapState, mapMutations } from "vuex";
 import BoardCommentComp from "@/components/Board/BoardCommentComp.vue";
@@ -169,6 +172,15 @@ export default {
       },
       btnColor: "",
       iconColor: "",
+      commentList: [],
+      comment: {
+        commentNo: "",
+        articleNo: "",
+        userId: "",
+        content: "",
+        likes: "",
+        regTime: "",
+      },
     };
   },
   created() {
@@ -184,6 +196,19 @@ export default {
       },
       (error) => {
         console.log(error);
+      }
+    );
+
+    listComment(
+      this.articleNo,
+      ({ data }) => {
+        // 댓글 목록 뿌려주기
+        console.log("listComment", data);
+        this.commentList = data;
+        console.log("commentList", this.commentList);
+      },
+      (error) => {
+        console.log("listComment", error);
       }
     );
 

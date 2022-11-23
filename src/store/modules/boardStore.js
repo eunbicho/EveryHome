@@ -1,6 +1,4 @@
-import {
-  listArticle,
-} from "@/api/board";
+import { listArticle, listComment, writeComment } from "@/api/board";
 
 const boardStore = {
   namespaced: true,
@@ -8,6 +6,7 @@ const boardStore = {
     articles: [],
     comments: [],
     curArticle: null,
+    writeCommentFlag: false,
   },
   getters: {},
   mutations: {
@@ -16,6 +15,12 @@ const boardStore = {
     },
     SET_ARTICLE(state, article) {
       state.curArticle = article;
+    },
+    SET_COMMENT_LIST(state, comments) {
+      state.comments = comments;
+    },
+    SET_COMMENT_FLAG(state, flag) {
+      state.flag = flag;
     }
   },
   actions: {
@@ -32,6 +37,29 @@ const boardStore = {
         }
       );
     },
+    getCommentList: ({ commit }, articleNo) => {
+      listComment(
+        articleNo,
+        ({ data }) => {
+          commit("SET_COMMENT_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    writeComment: ({ commit }, comment) => {
+      writeComment(comment, ({ data }) => { 
+        if (data == 'success') {
+          commit("SET_COMMENT_FLAG", true);
+        }
+        else {
+          commit("SET_COMMENT_FLAG", false);
+        }
+      }, (error) => { 
+        console.log(error)
+      })
+    }
   },
 };
 
