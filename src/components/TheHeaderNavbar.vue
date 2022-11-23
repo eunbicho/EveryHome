@@ -1,32 +1,4 @@
 <template>
-  <!-- <div>
-    <router-link to="/" class="left">로고</router-link>
-    <div class="right">
-      <nav class="navBar beforeLogin" v-if="userInfo == null">
-        <router-link to="/login">로그인 / 회원가입</router-link>
-      </nav>
-      <nav
-        class="navBar afterLogin"
-        v-if="userInfo != null"
-        style="margin-right: 20px"
-      >
-        {{ userInfo.userName }}님 안녕하세요!
-      </nav>
-      <nav
-        class="navBar afterLogin"
-        @click.prevent="onClickLogout"
-        v-if="userInfo != null"
-      >
-        로그아웃
-      </nav>
-      <nav class="navBar afterLogin" v-if="userInfo != null">
-        <router-link to="/mypage">내 정보</router-link>
-      </nav>
-      <nav class="navBar">
-        <router-link to="/board" v-if="userInfo != null">게시판</router-link>
-      </nav>
-    </div>
-  </div> -->
   <div>
     <b-navbar id="header-nav-bar" toggleable="xl" type="dark" variant="success">
       <b-navbar-brand href="#" @click="toHome" style="font-size: 23px">
@@ -49,9 +21,9 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <div @mouseover="onOver" @mouseleave="onLeave">
+          <!-- <div @mouseover="onOver" @mouseleave="onLeave">
             <b-nav-item-dropdown ref="dropdown" right v-if="userInfo != null">
-              <!-- Using 'button-content' slot -->
+              
               <template #button-content>
                 <span style="font-weight: bold; font-size: 16px; color: white"
                   >{{ userInfo.userName }} 님</span
@@ -64,7 +36,16 @@
                 >회원정보 수정</b-dropdown-item
               >
             </b-nav-item-dropdown>
-          </div>
+          </div> -->
+          <b-nav-item v-if="userInfo != null" style="margin-right: 10px"
+            >{{ userInfo.userName }}님 반갑습니다!</b-nav-item
+          >
+          <b-nav-item href="#" v-if="userInfo != null" @click="toFavorite"
+            >관심지역</b-nav-item
+          >
+          <b-nav-item href="#" v-if="userInfo != null" @click="toDetail"
+            >회원정보 수정</b-nav-item
+          >
           <b-nav-item href="#" v-if="userInfo != null" @click="onClickLogout"
             >로그아웃</b-nav-item
           >
@@ -109,12 +90,12 @@ export default {
     onClickLogin() {
       this.$router.push({ path: "/login" });
     },
-    onOver() {
-      this.$refs.dropdown.visible = true;
-    },
-    onLeave() {
-      this.$refs.dropdown.visible = false;
-    },
+    // onOver() {
+    //   this.$refs.dropdown.visible = true;
+    // },
+    // onLeave() {
+    //   this.$refs.dropdown.visible = false;
+    // },
     toDetail() {
       this.$router.push({ path: "/detail" });
     },

@@ -330,6 +330,18 @@ export default {
         console.log(error);
       }
     );
+
+    if (this.$route.query.dongCode) {
+      this.sidoCode = this.$route.query.dongCode.substring(0, 2);
+
+      this.getGugun();
+      this.gugunCode = this.$route.query.dongCode.substring(0, 5);
+
+      this.getDong();
+      this.dongCode = this.$route.query.dongCode;
+
+      this.$router.replace({ query: [] });
+    }
   },
   methods: {
     ...mapMutations(houseStore, ["SET_HOUSEDEALS"]),

@@ -1,273 +1,251 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="desserts"
-    sort-by="calories"
+    :items="favorites"
+    sort-by="rentCnt"
+    sort-desc="true"
     class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>My CRUD</v-toolbar-title>
-        <v-divider class="mx-4" inset vertical></v-divider>
+        <v-toolbar-title style="font-size: 27px">관심지역 목록</v-toolbar-title>
+
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-              New Item
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
 
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.name"
-                      label="Dessert name"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.calories"
-                      label="Calories"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.fat"
-                      label="Fat (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.carbs"
-                      label="Carbs (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.protein"
-                      label="Protein (g)"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
+        <b-form-select
+          v-model="sidoCode"
+          :options="sidos"
+          @change="getGugun"
+          class="select"
+        ></b-form-select>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-              <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5"
-              >Are you sure you want to delete this item?</v-card-title
-            >
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >Cancel</v-btn
-              >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                >OK</v-btn
-              >
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+        <b-form-select
+          v-model="gugunCode"
+          :options="guguns"
+          @change="getDong"
+          style="border-radius: 7px"
+        ></b-form-select>
+
+        <b-form-select
+          v-model="dongCode"
+          :options="dongs"
+          style="border-radius: 7px"
+        ></b-form-select>
+
+        <v-btn color="success" class="mb-2" @click="addFavorite">
+          관심지역 추가
+        </v-btn>
       </v-toolbar>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+      <v-icon small class="mr-2" @click="detailItem(item)">
+        mdi-magnify
+      </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize"> Reset </v-btn>
     </template>
   </v-data-table>
 </template>
 
 <script>
+import { sidoList, gugunList, dongList } from "@/api/house";
+import { listFavorite, addFavorite, deleteFavorite } from "@/api/member";
+import { mapState } from "vuex";
+
+const memberStore = "memberStore";
+
 export default {
   data: () => ({
-    dialog: false,
-    dialogDelete: false,
+    msg: "",
+    sidoCode: null,
+    gugunCode: null,
+    dongCode: null,
+    sidos: [{ value: null, text: "시/도 선택" }],
+    guguns: [{ value: null, text: "구/군 선택" }],
+    dongs: [{ value: null, text: "동 선택" }],
     headers: [
       {
-        text: "Dessert (100g serving)",
+        text: "지역",
         align: "start",
         sortable: false,
-        value: "name",
+        value: "region",
       },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "매물 수 (전세)", value: "leaseCnt" },
+      { text: "매물 수 (월세)", value: "rentCnt" },
+      { text: "평균 전세가 (만원)", value: "avgLeasePrice" },
+      { text: "평균 월세 보증금 (만원)", value: "avgRentDeposit" },
+      { text: "평균 월세 (만원)", value: "avgRentPrice" },
+      { text: "", value: "actions", sortable: false },
     ],
-    desserts: [],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
-    defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
+    favorites: [],
   }),
 
   computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
+    ...mapState(memberStore, ["userInfo"]),
   },
 
   created() {
-    this.initialize();
+    if (!this.userInfo) {
+      alert("회원만 사용할 수 있습니다.");
+      this.$router.push({ path: "/" });
+    }
+
+    this.clearSidoList();
+    sidoList(
+      ({ data }) => {
+        data.forEach((sido) => {
+          this.sidos.push({ value: sido.sidoCode, text: sido.sidoName });
+        });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    this.getFavorites();
   },
 
   methods: {
-    initialize() {
-      this.desserts = [
+    makeToast(variant = null) {
+      this.$bvToast.toast(this.msg, {
+        title: variant == "danger" ? "error" : "success",
+        variant: variant,
+        solid: true,
+        autoHideDelay: 1500,
+      });
+    },
+    addFavorite() {
+      if (!this.dongCode) {
+        this.msg = "지역을 선택해주세요.";
+        this.makeToast("danger");
+        return;
+      }
+
+      addFavorite(
         {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
+          userId: this.userInfo.userId,
+          dongCode: this.dongCode,
         },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
+        ({ data }) => {
+          if (data == "success") {
+            this.msg = "관심지역 추가 성공!";
+            this.makeToast("success");
+            this.getFavorites();
+          }
         },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    getFavorites() {
+      listFavorite(
+        this.userInfo.userId,
+        ({ data }) => {
+          this.favorites = [];
+
+          data.forEach((favorite) => {
+            let temp = {};
+            temp.dongCode = favorite.dongCode;
+            temp.region =
+              favorite.sidoName +
+              " " +
+              favorite.gugunName +
+              " " +
+              favorite.dongName;
+            temp.leaseCnt = favorite.leaseCnt;
+            temp.rentCnt = favorite.rentCnt;
+            temp.avgLeasePrice = favorite.avgLeasePrice;
+            temp.avgRentDeposit = favorite.avgRentDeposit;
+            temp.avgRentPrice = favorite.avgRentPrice;
+
+            this.favorites.push(temp);
+          });
         },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    getGugun() {
+      this.clearGugunList();
+      this.clearDongList();
+      const param = { sido: this.sidoCode };
+      gugunList(
+        param,
+        ({ data }) => {
+          data.forEach((gugun) => {
+            this.guguns.push({ value: gugun.gugunCode, text: gugun.gugunName });
+          });
         },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    getDong() {
+      this.clearDongList();
+      const param = { gugun: this.gugunCode };
+      dongList(
+        param,
+        ({ data }) => {
+          data.forEach((dong) => {
+            this.dongs.push({ value: dong.dongCode, text: dong.dongName });
+          });
         },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-        },
-      ];
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    clearSidoList() {
+      this.sidos = [{ value: null, text: "시/도 선택" }];
+    },
+    clearGugunList() {
+      this.guguns = [{ value: null, text: "구/군 선택" }];
+    },
+    clearDongList() {
+      this.dongs = [{ value: null, text: "동 선택" }];
     },
 
-    editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+    detailItem(item) {
+      console.log("dongCode send ", item.dongCode);
+      this.$router.push({ path: "/", query: { dongCode: item.dongCode } });
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
-      }
-      this.close();
+      console.log("item ", item);
+      deleteFavorite(
+        {
+          userId: this.userInfo.userId,
+          dongCode: item.dongCode,
+        },
+        ({ data }) => {
+          if (data == "success") {
+            this.msg = "관심지역 삭제 성공!";
+            this.makeToast("success");
+            this.getFavorites();
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.msg = "관심지역 삭제 중 에러 발생!";
+          this.makeToast("danger");
+        }
+      );
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.v-application .mb-2 {
+  margin-bottom: 0px !important;
+}
+
+.custom-select {
+  margin-right: 15px;
+  border-radius: 7px !important;
+  width: 180px !important;
+  height: 36px !important;
+}
+</style>
