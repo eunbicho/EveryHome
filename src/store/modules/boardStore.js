@@ -7,12 +7,16 @@ const boardStore = {
   state: {
     articles: [],
     comments: [],
+    curArticle: null,
   },
   getters: {},
   mutations: {
     SET_ARTICLE_LIST(state, articles) {
       state.articles = articles;
     },
+    SET_ARTICLE(state, article) {
+      state.curArticle = article;
+    }
   },
   actions: {
     getArticleList: ({ commit }, searchCondition) => {

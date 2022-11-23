@@ -44,11 +44,11 @@
 
         <div class="buttons">
           <div>
-            <v-btn outlined color="pink">
-              <v-icon dark> mdi-heart </v-icon></v-btn
+            <v-btn outlined :color="btnColor" @click="likeToggleArticle">
+              <v-icon :color="iconColor"> mdi-heart </v-icon></v-btn
             >
           </div>
-          <div>
+          <div v-if="userInfo.userId == this.article.userId">
             <v-btn outlined @click="modifyArticle"> 수정</v-btn
             ><v-btn outlined @click="deleteArticle" style="margin-left: 10px"
               >삭제</v-btn
@@ -57,13 +57,34 @@
         </div>
       </v-card>
     </v-container>
+
+    <!-- 댓글 작성 컴포넌트로 게시글 번호랑 사용자 아이디 넘겨주기-->
+    <board-comment-write-comp></board-comment-write-comp>
+    <board-comment-comp></board-comment-comp>
   </div>
 </template>
 
 <script>
-import { selectArticle, deleteArticle } from "@/api/board";
+import {
+  selectArticle,
+  deleteArticle,
+  likeArticle,
+  checkArticleLike,
+  unlikeArticle,
+} from "@/api/board";
+import { mapState, mapMutations } from "vuex";
+import BoardCommentComp from "@/components/Board/BoardCommentComp.vue";
+import BoardCommentWriteComp from "@/components/Board/BoardCommentWriteComp.vue";
+const memberStore = "memberStore";
+const boardStore = "boardStore";
+
 export default {
+  components: {
+    BoardCommentComp,
+    BoardCommentWriteComp,
+  },
   methods: {
+    ...mapMutations(boardStore, ["SET_ARTICLE"]),
     deleteArticle() {
       deleteArticle(
         this.articleNo,
@@ -84,9 +105,55 @@ export default {
         params: { articleNo: this.articleNo },
       });
     },
+    likeToggleArticle() {
+      checkArticleLike(
+        { userId: this.userInfo.userId, articleNo: this.articleNo },
+        ({ data }) => {
+          if (data === 1) {
+            // 누른 적 있으면 버튼 눌렀을 때 취소
+            unlikeArticle(
+              this.userInfo,
+              parseInt(this.articleNo),
+              ({ data }) => {
+                if (data === "success") {
+                  this.btnColor = "grey";
+                  this.iconColor = "grey";
+                }
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+          } else {
+            // 누른 적 없으면 버튼 눌렀을 때 추천
+
+            likeArticle(
+              this.userInfo,
+              parseInt(this.articleNo),
+              ({ data }) => {
+                if (data === "success") {
+                  this.btnColor = "pink";
+                  this.iconColor = "pink";
+                }
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
     moveList() {
       this.$router.push({ name: "boardlist" });
     },
+  },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+    ...mapState(boardStore, ["curArticle"]),
   },
   data() {
     return {
@@ -100,6 +167,8 @@ export default {
         hits: "",
         regTime: "",
       },
+      btnColor: "",
+      iconColor: "",
     };
   },
   created() {
@@ -110,7 +179,29 @@ export default {
       this.articleNo,
       ({ data }) => {
         this.article = data;
-        console.log(data);
+        this.SET_ARTICLE(this.article);
+        console.log("curArticle", this.curArticle);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    // 현재 사용자의 추천 유무 확인
+    checkArticleLike(
+      { userId: this.userInfo.userId, articleNo: this.articleNo },
+      ({ data }) => {
+        if (data === 1) {
+          console.log("누른적 있음", data);
+          // 누른 적 있으면 시작할 때 버튼 색 있게
+          this.btnColor = "pink";
+          this.iconColor = "pink";
+        } else {
+          console.log("누른적 없음", data);
+          // 누른 적 없으면 시작할 때 버튼 색 없게
+          this.btnColor = "grey";
+          this.iconColor = "grey";
+        }
       },
       (error) => {
         console.log(error);
@@ -121,6 +212,12 @@ export default {
 </script>
 
 <style scoped>
+.frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .container {
   display: flex;
   justify-content: center;

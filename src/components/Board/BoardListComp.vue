@@ -70,7 +70,7 @@
               position: relative;
             "
           >
-            <v-icon>mdi-plus</v-icon>
+            <v-icon>mdi-pencil</v-icon>
             <label style="margin-top: 50px; position: absolute; color: green"
               >글쓰기</label
             >

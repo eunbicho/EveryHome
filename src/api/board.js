@@ -36,6 +36,10 @@ function unlikeArticle(user, articleNo, success, fail) {
     .catch(fail);
 }
 
+function checkArticleLike(param, success, fail) {
+  api.get(`/board/check/article`, {params: param}).then(success).catch(fail);
+}
+
 function writeComment(comment, success, fail) {
   api.post(`/comment`, JSON.stringify(comment)).then(success).catch(fail);
 }
@@ -66,6 +70,7 @@ function unlikeComment(user, commentNo, success, fail) {
     .catch(fail);
 }
 
+
 export {
   listArticle,
   writeArticle,
@@ -80,4 +85,5 @@ export {
   deleteComment,
   likeComment,
   unlikeComment,
+  checkArticleLike
 };

@@ -3,7 +3,6 @@
     <v-container>
       <v-card style="width: 800px" height="600px">
         <div class="group">
-          <v-card-title>[제목]</v-card-title>
           <v-text-field
             label="제목을 입력해주세요."
             single-line

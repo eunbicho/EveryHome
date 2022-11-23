@@ -3,7 +3,6 @@
     <v-container>
       <v-card style="width: 800px" height="600px">
         <div class="group">
-          <v-card-title>[제목]</v-card-title>
           <v-text-field
             label=""
             single-line
@@ -58,8 +57,8 @@ export default {
         console.log(error);
       }
     );
+
     this.selectedType = this.article.type;
-    console.log(this.article);
   },
   computed: {
     ...mapState(memberStore, ["userInfo"]),
@@ -67,7 +66,6 @@ export default {
   methods: {
     modify() {
       this.article.userId = this.userInfo.userId;
-      this.article.type = this.selectedType;
 
       modifyArticle(
         this.article,
