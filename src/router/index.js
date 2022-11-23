@@ -4,6 +4,7 @@ import MainView from "../views/MainView.vue";
 import LoginRegisterView from "../views/LoginRegisterView";
 import BoardView from "../views/BoardView";
 import UserDetailView from "@/views/UserDetailView";
+import FavoriteView from "@/views/FavoriteView";
 import store from "@/store";
 
 Vue.use(VueRouter);
@@ -76,6 +77,11 @@ const routes = [
     path: "/detail",
     name: "detail",
     component: UserDetailView,
+  },
+  {
+    path: "/favorite",
+    name: "favorite",
+    component: FavoriteView,
   },
 ];
 
