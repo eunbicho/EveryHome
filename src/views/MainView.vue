@@ -27,7 +27,7 @@ export default {
     ...mapState(memberStore, ["isLogin", "isLoginError", "userInfo"]),
   },
   created() {
-    console.log(this.userInfo);
+    console.log("userInfo: ", this.userInfo);
   },
 };
 </script>
