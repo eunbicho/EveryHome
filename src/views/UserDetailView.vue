@@ -1,18 +1,18 @@
 <template>
   <div>
     <the-header-navbar></the-header-navbar>
-    <login-register-comp></login-register-comp>
+    <user-detail-comp></user-detail-comp>
   </div>
 </template>
 
 <script>
+import UserDetailComp from "@/components/UserDetailComp.vue";
 import TheHeaderNavbar from "@/components/TheHeaderNavbar.vue";
-import LoginRegisterComp from "@/components/LoginRegister/LoginRegisterComp.vue";
 
 export default {
   components: {
+    UserDetailComp,
     TheHeaderNavbar,
-    LoginRegisterComp,
   },
 };
 </script>

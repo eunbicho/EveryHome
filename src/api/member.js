@@ -32,6 +32,10 @@ async function idCheck(userId, success, fail) {
   await api.get(`/user/${userId}`).then(success).catch(fail);
 }
 
+async function checkIdPwd(userId, userPwd, success, fail) {
+  await api.get(`/user/${userId}/${userPwd}`).then(success).catch(fail);
+}
+
 async function modifyUser(user, success, fail) {
   await api.put(`/user`, JSON.stringify(user)).then(success).catch(fail);
 }
@@ -65,6 +69,7 @@ export {
   tokenRegeneration,
   logout,
   idCheck,
+  checkIdPwd,
   modifyUser,
   deleteUser,
   addFavorite,

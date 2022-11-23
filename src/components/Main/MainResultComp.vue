@@ -19,7 +19,7 @@
     </div>
 
     <!-- DetailModal -->
-    <b-modal id="modal-lg" size="lg" title="상세 정보">
+    <b-modal id="modal-lg" size="lg" title="매물 상세 정보">
       <div class="detail-container">
         <div id="roadview" class="roadview" ref="roadview"></div>
         <div id="detail">

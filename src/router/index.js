@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import MainView from "../views/MainView.vue";
 import LoginRegisterView from "../views/LoginRegisterView";
 import BoardView from "../views/BoardView";
+import UserDetailView from "@/views/UserDetailView";
 import store from "@/store";
 
 Vue.use(VueRouter);
@@ -66,11 +67,15 @@ const routes = [
       {
         path: "modify/:articleNo",
         name: "boardmodify",
-        
+
         component: () => import("@/components/Board/BoardModifyComp"),
       },
-
     ],
+  },
+  {
+    path: "/detail",
+    name: "detail",
+    component: UserDetailView,
   },
 ];
 
