@@ -117,7 +117,6 @@ export default {
   flex-direction: column;
   accent-color: rgb(20, 138, 83);
   margin-top: 30px;
-  margin-bottom: 30px;
 }
 
 .card-title {
