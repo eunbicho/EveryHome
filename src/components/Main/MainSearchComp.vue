@@ -339,6 +339,7 @@ export default {
 
       this.getDong();
       this.dongCode = this.$route.query.dongCode;
+      this.searchCondition.dongCode = this.$route.query.dongCode;
 
       this.$router.replace({ query: [] });
     }
