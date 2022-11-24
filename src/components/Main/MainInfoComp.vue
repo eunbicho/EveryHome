@@ -116,7 +116,7 @@ export default {
   align-items: center;
   flex-direction: column;
   accent-color: rgb(20, 138, 83);
-  margin-top: 30px;
+  margin-top: 50px;
 }
 
 .card-title {

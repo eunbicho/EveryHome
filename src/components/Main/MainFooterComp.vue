@@ -16,6 +16,6 @@ export default {};
 }
 
 .comp-footer {
-  margin-top: 30px;
+  margin-top: 50px;
 }
 </style>
