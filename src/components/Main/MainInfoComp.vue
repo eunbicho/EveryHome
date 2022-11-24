@@ -124,4 +124,8 @@ export default {
   font-weight: 600;
   font-size: 24px;
 }
+
+.card:hover {
+  box-shadow: 5px 5px 5px 5px rgba(192, 192, 192, 0.445);
+}
 </style>

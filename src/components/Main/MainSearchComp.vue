@@ -12,56 +12,49 @@
         <div class="conditions">
           <div style="margin-left: 35px; margin-top: 20px">
             <h4><i class="bx bx-current-location icon"></i> 지역 선택</h4>
-            <b-row class="mt-4 mb-4 text-center">
-              <b-col>
-                <b-form-select
-                  v-model="sidoCode"
-                  :options="sidos"
-                  @change="getGugun"
-                  style="margin-left: 20px; border-radius: 7px"
-                ></b-form-select>
-              </b-col>
-              <b-col>
-                <b-form-select
-                  v-model="gugunCode"
-                  :options="guguns"
-                  @change="getDong"
-                  style="border-radius: 7px"
-                ></b-form-select>
-              </b-col>
-              <b-col>
-                <b-form-select
-                  v-model="dongCode"
-                  :options="dongs"
-                  @change="curDongCode"
-                  style="border-radius: 7px"
-                ></b-form-select>
-              </b-col>
+            <div class="select-region-div">
+              <b-form-select
+                v-model="sidoCode"
+                :options="sidos"
+                @change="getGugun"
+                style="margin-left: 20px; border-radius: 7px"
+              ></b-form-select>
+              <b-form-select
+                v-model="gugunCode"
+                :options="guguns"
+                @change="getDong"
+                style="border-radius: 7px"
+              ></b-form-select>
+              <b-form-select
+                v-model="dongCode"
+                :options="dongs"
+                @change="curDongCode"
+                style="border-radius: 7px"
+              ></b-form-select>
               <button class="btn-favorite" @click.prevent="favorite">
                 관심지역 추가
               </button>
-              <b-col>
-                <b-alert
-                  :show="dismissCountDown"
-                  fade
-                  variant="success"
-                  @dismiss-count-down="countDownChanged"
-                  class="alert-favorite"
-                >
-                  추가 성공!
-                </b-alert>
-                <b-alert
-                  :show="dismissCountDown2"
-                  fade
-                  variant="danger"
-                  @dismiss-count-down="countDownChanged2"
-                  class="alert-favorite"
-                  style="width: 200px"
-                >
-                  이미 추가한 지역입니다.
-                </b-alert>
-              </b-col>
-            </b-row>
+
+              <b-alert
+                :show="dismissCountDown"
+                fade
+                variant="success"
+                @dismiss-count-down="countDownChanged"
+                class="alert-favorite"
+              >
+                추가 성공!
+              </b-alert>
+              <b-alert
+                :show="dismissCountDown2"
+                fade
+                variant="danger"
+                @dismiss-count-down="countDownChanged2"
+                class="alert-favorite"
+                style="width: 200px"
+              >
+                {{ msg }}
+              </b-alert>
+            </div>
           </div>
           <!-- 학교 기준 검색 (보류) -->
 
@@ -313,6 +306,7 @@ export default {
       dismissCountDown: 0,
       dismissSecs2: 1,
       dismissCountDown2: 0,
+      msg: "",
     };
   },
   computed: {
@@ -427,12 +421,12 @@ export default {
     },
     favorite() {
       if (!this.userInfo) {
-        alert("회원만 사용할 수 있는 기능입니다.");
+        this.showAlert2("회원 전용 기능입니다.");
         return;
       }
 
       if (!this.searchCondition.dongCode) {
-        alert("지역을 선택해주세요.");
+        this.showAlert2("지역을 선택해주세요.");
         return;
       }
 
@@ -444,7 +438,7 @@ export default {
         },
         (error) => {
           console.log(error);
-          this.showAlert2();
+          this.showAlert2("이미 추가한 지역입니다.");
         }
       );
     },
@@ -457,7 +451,8 @@ export default {
     countDownChanged2(dismissCountDown2) {
       this.dismissCountDown2 = dismissCountDown2;
     },
-    showAlert2() {
+    showAlert2(msg) {
+      this.msg = msg;
       this.dismissCountDown2 = this.dismissSecs2;
     },
   },
@@ -631,8 +626,7 @@ h4 {
   width: 130px;
   height: 35px;
 
-  margin-top: 10px;
-  margin-left: 15px;
+  margin-right: 20px;
 }
 
 form {
@@ -705,10 +699,9 @@ label {
   width: 130px;
   height: 35px;
 
-  margin-top: 10px;
-  margin-left: 15px;
-  margin-bottom: 10px;
-  margin-right: 15px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 20px;
 
   align-content: center;
   justify-content: center;
@@ -716,5 +709,18 @@ label {
 
 .alert {
   padding: 0.35rem;
+}
+
+.select-region-div {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 15px;
+  padding-left: 25px;
+  margin-bottom: 20px;
+}
+
+.custom-select {
+  margin: 0 !important;
+  margin-right: 20px !important;
 }
 </style>

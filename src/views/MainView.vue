@@ -14,9 +14,10 @@ import MainSearchComp from "@/components/Main/MainSearchComp.vue";
 import MainResultComp from "@/components/Main/MainResultComp.vue";
 import MainInfoComp from "@/components/Main/MainInfoComp.vue";
 import MainFooterComp from "@/components/Main/MainFooterComp.vue";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 const memberStore = "memberStore";
+const houseStore = "houseStore";
 
 export default {
   components: {
@@ -31,6 +32,10 @@ export default {
   },
   created() {
     console.log("userInfo: ", this.userInfo);
+    this.CLEAR_HOUSEDEALS();
+  },
+  methods: {
+    ...mapMutations(houseStore, ["CLEAR_HOUSEDEALS"]),
   },
 };
 </script>

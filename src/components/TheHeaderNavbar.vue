@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar id="header-nav-bar" toggleable="xl" type="dark" variant="success">
-      <b-navbar-brand href="#" @click="toHome" style="font-size: 23px">
+      <b-navbar-brand href="#" @click="toHome" class="main-name">
         <img
           src="https://placekitten.com/g/30/30"
           class="d-inline-block align-top"
@@ -88,6 +88,13 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.1/KOTRA_BOLD-Bold.woff");
+
+.main-name {
+  font-size: 24px;
+  font-family: "KOTRA_BOLD-Bold";
+}
+
 .navBar {
   background-color: rgba(255, 255, 255, 0);
   color: black;
