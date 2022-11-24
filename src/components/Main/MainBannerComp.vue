@@ -5,9 +5,7 @@
     <div class="mainTitle">
       <h3>대학생들을 위한</h3>
       <h3 style="color: beige; margin-top: -1px">자취방 커뮤니티</h3>
-      <button class="custom-btn btn-6" @click="toBoard">
-        <span>게시판 바로가기</span>
-      </button>
+      <button class="custom-btn btn-6" @click="toBoard">게시판 바로가기</button>
     </div>
   </div>
 </template>
@@ -46,8 +44,8 @@ export default {
 
 .mainTitle {
   position: absolute;
-  top: 180px;
-  left: 35px;
+  top: 280px;
+  left: 60px;
 
   color: white;
   text-shadow: 1px 1px black;
@@ -57,7 +55,7 @@ export default {
 }
 
 .mainTitle h3 {
-  font-size: 3rem;
+  font-size: 5rem;
 }
 
 h3 {
@@ -78,13 +76,14 @@ button {
 }
 .custom-btn {
   font: initial;
-  width: 130px;
-  height: 40px;
+  width: 250px;
+  height: 60px;
   padding: 10px 25px;
   border: 2px solid black;
-  font-family: "Lato", sans-serif;
+  font-size: 30px;
+  border-radius: 10px !important;
 
-  font-weight: 500;
+  font-weight: bold;
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
