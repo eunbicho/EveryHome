@@ -8,11 +8,25 @@
       </div>
       <div class="resultList">
         <div class="articleFrame">
+          <div>
+            <div class="result-text">매물 정보</div>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+              class="result-search"
+            ></v-text-field>
+          </div>
+
           <v-data-table
             class="housedeals"
             :headers="headers"
             :items="housedeals"
+            :search="search"
             @click:row="detailHouse"
+            style="clear: both"
           ></v-data-table>
         </div>
       </div>
@@ -109,6 +123,7 @@ export default {
       house: {},
       road: "",
       markerPositions: [],
+      search: "",
     };
   },
   watch: {
@@ -245,5 +260,30 @@ h2 {
   margin-right: 15px;
   width: 650px;
   height: 650px;
+}
+
+.result-text {
+  float: left;
+  font-size: 20px;
+  font-weight: 500;
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  cursor: context-menu !important;
+}
+
+.result-search {
+  width: 200px;
+  float: right;
+  margin-right: 10px;
+}
+
+.v-text-field {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+td.text-start {
+  cursor: context-menu !important;
 }
 </style>

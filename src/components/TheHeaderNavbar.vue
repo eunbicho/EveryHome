@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar id="header-nav-bar" toggleable="xl" type="dark" variant="success">
-      <b-navbar-brand href="#" @click="toHome" style="font-size: 23px">
+      <b-navbar-brand href="#" @click="toHome" class="main-name">
         <img
           src="https://placekitten.com/g/30/30"
           class="d-inline-block align-top"
@@ -14,30 +14,11 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-        <!-- <b-navbar-nav>
-          <b-nav-item href="#">Link</b-nav-item>
-          <b-nav-item href="#" disabled>Disabled</b-nav-item>
-        </b-navbar-nav> -->
-
-        <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <!-- <div @mouseover="onOver" @mouseleave="onLeave">
-            <b-nav-item-dropdown ref="dropdown" right v-if="userInfo != null">
-              
-              <template #button-content>
-                <span style="font-weight: bold; font-size: 16px; color: white"
-                  >{{ userInfo.userName }} 님</span
-                >
-              </template>
-              <b-dropdown-item href="#" @click="toFavorite"
-                >관심지역</b-dropdown-item
-              >
-              <b-dropdown-item href="#" @click="toDetail"
-                >회원정보 수정</b-dropdown-item
-              >
-            </b-nav-item-dropdown>
-          </div> -->
-          <b-nav-item v-if="userInfo != null" style="margin-right: 10px"
+          <b-nav-item
+            v-if="userInfo != null"
+            style="margin-right: 10px"
+            class="greeting"
             >{{ userInfo.userName }}님 반갑습니다!</b-nav-item
           >
           <b-nav-item href="#" v-if="userInfo != null" @click="toFavorite"
@@ -107,6 +88,13 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.1/KOTRA_BOLD-Bold.woff");
+
+.main-name {
+  font-size: 24px;
+  font-family: "KOTRA_BOLD-Bold";
+}
+
 .navBar {
   background-color: rgba(255, 255, 255, 0);
   color: black;
@@ -147,5 +135,13 @@ export default {
 .right {
   display: flex;
   flex-direction: row;
+}
+
+.greeting .nav-link {
+  cursor: context-menu;
+}
+
+.greeting .nav-link:hover {
+  color: white !important;
 }
 </style>

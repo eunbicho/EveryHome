@@ -127,7 +127,7 @@ button {
 }
 .btn-6:hover {
   color: #000;
-  background: white;
+  background: rgb(164, 241, 145);
 }
 .btn-6:hover:before {
   transition: all 500ms ease;

@@ -16,6 +16,9 @@ const houseStore = {
     SET_CONTENTS(state, contents) {
       state.contents = contents;
     },
+    CLEAR_HOUSEDEALS(state) {
+      state.housedeals = [];
+    },
   },
 };
 

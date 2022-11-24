@@ -12,6 +12,15 @@
 
         <v-spacer></v-spacer>
 
+        <v-btn
+          color="success"
+          class="mb-2"
+          style="margin-right: 15px"
+          @click="toHome"
+        >
+          홈으로
+        </v-btn>
+
         <b-form-select
           v-model="sidoCode"
           :options="sidos"
@@ -134,6 +143,8 @@ export default {
         },
         (error) => {
           console.log(error);
+          this.msg = "이미 추가한 지역입니다!";
+          this.makeToast("danger");
         }
       );
     },
@@ -232,6 +243,10 @@ export default {
           this.makeToast("danger");
         }
       );
+    },
+
+    toHome() {
+      this.$router.push({ path: "/" });
     },
   },
 };
