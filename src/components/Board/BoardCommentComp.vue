@@ -147,6 +147,7 @@ export default {
   },
   methods: {
     modifyToggle() {
+      this.newComment.content = this.comment.content;
       console.log("수정해야해");
       // modify모드 토글
       if (this.isModifyMode) {
@@ -160,6 +161,7 @@ export default {
     modifyComment() {
       this.newComment.userId = this.comment.userId;
       this.newComment.commentNo = this.comment.commentNo;
+   
       modifyComment(
         this.newComment,
         ({ data }) => {

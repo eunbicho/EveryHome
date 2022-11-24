@@ -166,6 +166,7 @@ export default {
         this.msg = "변경할 비밀번호가 일치하지 않습니다.";
         this.showAlert();
       } else {
+        console.log("test ", this.userInfo)
         checkIdPwd(
           this.user.userId,
           this.curPwd,

@@ -81,7 +81,7 @@ export default {
       );
     },
     moveList() {
-      this.$router.push({ name: "boardlist" });
+      this.$router.push({ name: "boarddetail" });
     },
   },
   data() {

@@ -44,7 +44,7 @@ export default {
 
 .mainTitle {
   position: absolute;
-  top: 280px;
+  top: 230px;
   left: 60px;
 
   color: white;
@@ -55,7 +55,7 @@ export default {
 }
 
 .mainTitle h3 {
-  font-size: 5rem;
+  font-size: 4rem;
 }
 
 h3 {
@@ -79,7 +79,7 @@ button {
   width: 250px;
   height: 60px;
   padding: 10px 25px;
-  border: 2px solid black;
+  /* border: 2px solid black; */
   font-size: 30px;
   border-radius: 10px !important;
 
@@ -112,7 +112,7 @@ button {
   content: "";
   height: 0%;
   width: 2px;
-  background: black;
+  /* background: black; */
 }
 .btn-6:before {
   right: 0;

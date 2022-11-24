@@ -406,7 +406,7 @@ export default {
         var pos = window.pageYOffset;
         var step = 20; // 이동 크기 픽셀
         if (pos < 1200) {
-          window.scrollTo(800, pos + step);
+          window.scrollTo(0, pos + step);
         } else {
           window.clearInterval(scroll);
         }
