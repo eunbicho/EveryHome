@@ -3,12 +3,12 @@
     <b-navbar id="header-nav-bar" toggleable="xl" type="dark" variant="success">
       <b-navbar-brand href="#" @click="toHome" class="main-name">
         <img
-          src="https://placekitten.com/g/30/30"
+          src="@/assets/mainlogo2.png"
           class="d-inline-block align-top"
           alt="Kitten"
-          style="margin-right: 5px"
+          style="margin-right: 5px; height: 30px"
         />
-        EveryHome
+        에브리홈
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>

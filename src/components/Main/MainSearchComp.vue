@@ -399,6 +399,19 @@ export default {
 
       console.log(this.searchCondition);
     },
+    scrollToTop() {
+      //스크롤 속도를 빠르게 하려면 이동 간격 시간을 줄이거나, 이동 크기 픽셀을 늘리면 됩니다.
+      var between = 16; // 이동 간격 시간
+      var scroll = window.setInterval(function () {
+        var pos = window.pageYOffset;
+        var step = 20; // 이동 크기 픽셀
+        if (pos < 1200) {
+          window.scrollTo(800, pos + step);
+        } else {
+          window.clearInterval(scroll);
+        }
+      }, between);
+    },
     search() {
       if (!this.searchCondition.dongCode) {
         alert("지역을 선택해주세요.");
@@ -418,6 +431,9 @@ export default {
           console.log(error);
         }
       );
+
+      // 화면 이동
+      this.scrollToTop();
     },
     favorite() {
       if (!this.userInfo) {
