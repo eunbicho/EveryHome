@@ -56,8 +56,9 @@
                   variant="danger"
                   @dismiss-count-down="countDownChanged2"
                   class="alert-favorite"
+                  style="width: 200px"
                 >
-                  에러 발생!
+                  이미 추가한 지역입니다.
                 </b-alert>
               </b-col>
             </b-row>

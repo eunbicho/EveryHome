@@ -179,7 +179,7 @@ export default {
                 this.user,
                 ({ data }) => {
                   if (data == "success") {
-                    alert("회원정보 수정 성공!");
+                    alert("비밀번호가 변경되었습니다.");
                     this.$router.push({ path: "/" });
                   }
                 },
@@ -232,7 +232,7 @@ export default {
         .msgBoxConfirm(
           "회원탈퇴 시 작성한 게시물, 댓글 등 모든 정보가 삭제됩니다.",
           {
-            title: "회원탈퇴 확인",
+            title: "회원탈퇴",
             size: "sm",
             buttonSize: "sm",
             okVariant: "danger",
