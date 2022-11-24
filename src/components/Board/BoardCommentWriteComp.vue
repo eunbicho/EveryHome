@@ -50,6 +50,9 @@ import { mapState } from "vuex";
 const memberStore = "memberStore";
 const boardStore = "boardStore";
 export default {
+  props: {
+    articleNo: Number,
+  },
   computed: {
     ...mapState(memberStore, ["userInfo"]),
     ...mapState(boardStore, ["curArticle"]),
@@ -66,17 +69,17 @@ export default {
   },
   methods: {
     writeComment() {
-      console.log("이 번호 게시물에 댓글을 남겼습니다.",this.curArticle.articleNo)
-      this.comment.articleNo = this.curArticle.articleNo;
+      console.log("이 번호 게시물에 댓글을 남겼습니다.", this.articleNo);
+      this.comment.articleNo = this.articleNo;
       this.comment.userId = this.userInfo.userId;
       console.log(this.userInfo.userId);
       writeComment(
         this.comment,
         ({ data }) => {
           if (data === "success") {
-            if (confirm("댓글 작성완료!")) {
-              this.$router.go();
-            }
+            this.comment.content = "";
+            this.$emit("CommentWrite");
+            this.$router.go();
             // listComment(
             //   this.articleNo,
             //   ({ data }) => {

@@ -1,25 +1,33 @@
 <template>
   <div class="frame">
     <v-container>
+      <div
+        style="
+          display: flex;
+          justify-content: flex-start;
+          width: 800px;
+          margin-bottom: 30px;
+        "
+      >
+        <h2>글쓰기</h2>
+      </div>
       <v-card style="width: 800px" height="600px">
         <div class="group">
           <v-text-field
             label="제목을 입력해주세요."
-            single-line
             outlined
             hide-details=""
             v-model="article.subject"
+            style="padding: 10px"
           ></v-text-field>
         </div>
         <v-divider></v-divider>
         <div class="options">
-          <div class="optionsLeft">
-            <b-form-select
-              v-model="selectedType"
-              :options="types"
-              style="margin-left: 20px"
-            ></b-form-select>
-          </div>
+          <b-form-select
+            v-model="selectedType"
+            :options="types"
+            style="margin-left: 20px; width: 50%"
+          ></b-form-select>
         </div>
 
         <v-textarea
@@ -55,18 +63,29 @@ export default {
       this.article.userId = this.userInfo.userId;
       this.article.type = this.selectedType;
 
-      writeArticle(
-        this.article,
-        ({ data }) => {
-          if (data === "success") {
-            alert("등록이 완료되었습니다.");
-            this.moveList();
+      console.log(this.article.subject);
+
+      // 제목, 말머리 선택, 내용이 비어있지 않을 때 등록되게 하기
+      if (!this.article.subject) {
+        alert("제목을 입력해주세요.");
+      } else if (this.selectedType == null) {
+        alert("말머리를 선택해주세요.");
+      } else if (!this.article.content) {
+        alert("내용을 입력해주세요.");
+      } else {
+        writeArticle(
+          this.article,
+          ({ data }) => {
+            if (data === "success") {
+              alert("등록이 완료되었습니다.");
+              this.moveList();
+            }
+          },
+          (error) => {
+            console.log(error);
           }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+        );
+      }
     },
     moveList() {
       this.$router.push({ name: "boardlist" });
@@ -100,10 +119,14 @@ export default {
 <style scoped>
 .frame {
   margin-top: 50px;
+  display: flex;
+  flex-direction: column;
 }
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .group {
@@ -121,8 +144,6 @@ export default {
 .options {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  padding: 10px;
 }
 
 .optionsRight {
@@ -148,5 +169,8 @@ export default {
   justify-content: flex-end;
   margin-right: 15px;
   margin-top: 30px;
+}
+.custom-select {
+  width: fit-content !important;
 }
 </style>

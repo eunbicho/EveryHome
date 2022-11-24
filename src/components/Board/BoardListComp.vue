@@ -17,6 +17,7 @@
           dense
           solo
           v-model="searchCondition.type"
+          hide-details=""
         ></v-select>
 
         <!-- 글쓴이, 제목 선택 -->
@@ -27,6 +28,8 @@
           dense
           solo
           v-model="searchCondition.key"
+          hide-details=""
+          style="margin-left: 10px"
         ></v-select>
 
         <!-- 글 검색하기 -->
@@ -36,12 +39,14 @@
           label="검색어"
           single-line
           v-model="searchCondition.word"
+          hide-details=""
+          style="margin-left: 10px"
         ></v-text-field>
         <v-btn @click="search" style="margin-left: 10px">검색</v-btn>
       </div>
     </v-card-title>
 
-    <div class="articleFrame" style="position: relative">
+    <div class="articleFrame">
       <v-data-table
         class="articles"
         :headers="headers"
@@ -51,16 +56,15 @@
       ></v-data-table>
       <!-- 글작성 floating 버튼-->
 
-      <v-fab-transition>
+      <v-fab-transition style="position: relative">
         <v-btn
           v-show="!hidden"
           color="rgb(157, 196, 157)"
           dark
           absolute
-          top
-          right
           fab
           @click="write"
+          style="top: 30%; left: 91%"
         >
           <div
             style="
@@ -82,7 +86,7 @@
 </template>
 
 <script>
-import { listArticle } from "@/api/board";
+import { listArticle, commentCount } from "@/api/board";
 
 export default {
   methods: {
@@ -129,7 +133,21 @@ export default {
     listArticle(
       {},
       ({ data }) => {
-        this.articles = data;
+        this.articles = [];
+        // articleNo에 해당하는 댓글 수 가져오기
+        data.forEach((article) => {
+          commentCount(
+            article.articleNo,
+            ({ data }) => {
+              article.comments = data;
+              this.articles.push(article);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        });
+
         console.log(data);
       },
       (error) => {
@@ -146,13 +164,14 @@ export default {
           align: "start",
           sortable: false,
           value: "type",
-          width: "10%",
+          width: "20%",
         },
-        { text: "제목", value: "subject", sortable: false, width: "40%" },
+        { text: "제목", value: "subject", sortable: false, width: "30%" },
         { text: "글쓴이", value: "userId", sortable: false, width: "10%" },
         { text: "작성시간", value: "regTime", width: "10%" },
         { text: "추천", value: "likes", width: "10%" },
         { text: "조회수", value: "hits", width: "10%" },
+        { text: "댓글수", value: "comments", width: "10%" },
       ],
       articles: [],
       items: [
@@ -270,5 +289,9 @@ h4 {
 
 #table .v-data-table__wrapper {
   margin-bottom: 60px;
+}
+
+.v-text-field {
+  padding: 0;
 }
 </style>
