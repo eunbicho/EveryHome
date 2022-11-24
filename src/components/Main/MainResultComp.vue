@@ -235,7 +235,7 @@ h2 {
   justify-content: center;
   border-radius: 10px;
   margin-top: 10px;
-  padding: 10px;
+  padding: 30px 10px;
 }
 
 .resultList {

@@ -51,9 +51,20 @@
               <v-icon :color="iconColor"> mdi-heart </v-icon></v-btn
             >
           </div>
-          <div v-if="userInfo.userId == this.article.userId">
-            <v-btn outlined @click="modifyArticle"> 수정</v-btn
-            ><v-btn outlined @click="deleteArticle" style="margin-left: 10px"
+          <div>
+            <v-btn outlined @click="toList"> 목록</v-btn>
+            <v-btn
+              outlined
+              @click="modifyArticle"
+              style="margin-left: 10px"
+              v-if="userInfo.userId == this.article.userId"
+            >
+              수정</v-btn
+            ><v-btn
+              outlined
+              @click="deleteArticle"
+              style="margin-left: 10px"
+              v-if="userInfo.userId == this.article.userId"
               >삭제</v-btn
             >
           </div>
@@ -118,6 +129,9 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_ARTICLE"]),
+    toList() {
+      this.$router.push({ path: "/board/list" });
+    },
     loadComment() {
       console.log("comment loaded");
 

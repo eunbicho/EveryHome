@@ -10,7 +10,7 @@
       <form class="searchForm">
         <!-- 선택한 조건들 전체를 묶는 conditions-->
         <div class="conditions">
-          <div style="margin-left: 35px; margin-top: 20px">
+          <div style="margin-left: 35px; margin-top: 35px">
             <h4><i class="bx bx-current-location icon"></i> 지역 선택</h4>
             <div class="select-region-div">
               <b-form-select
@@ -592,7 +592,7 @@ h4 {
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 30px;
   padding-bottom: 20px;
 }
 
@@ -730,9 +730,9 @@ label {
 .select-region-div {
   display: flex;
   justify-content: flex-start;
-  margin-top: 15px;
+  margin-top: 20px;
   padding-left: 25px;
-  margin-bottom: 20px;
+  margin-bottom: 35px;
 }
 
 .custom-select {
